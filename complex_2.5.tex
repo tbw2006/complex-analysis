@@ -1,0 +1,199 @@
+% UTF8 表示使用通用国际字符作为内码，ctexart 表示这是一篇中文论文
+\documentclass[UTF8]{ctexart} 
+% 通过调用宏包 geometry 调整页面设置为 A4 纸，页边距 2.6 cm
+\usepackage[a4paper,margin=2.6cm]{geometry}
+
+\usepackage{amsmath, amssymb, amsthm} % 数学公式、符号、定理
+\usepackage{graphicx}                 % 插图
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref} % 超链接与交叉引用
+
+% 设置文章标题
+\title{复变函数学习笔记：2.5节“进一步应用”}
+% 设置撰写日期
+\date{}
+
+% 设置环境 theorem (这是用户自定义环境名，相当于一个变量)
+% 显示内容是“定理”，除了名字，它会自动管理编号，所以第一个出现的定理会显示 “定理 1”，等等
+% [section]表示和节绑定，这样第二节的第一个定理就会自动显示成“定理 2.1”，等等
+\newtheorem{theorem}{定理}[section]
+% 设置引理环境，直接套用theorem，后果是和定理共享编号
+\newtheorem{lemma}[theorem]{引理}
+% 设置定义环境，和定理共享编号
+\newtheorem{definition}[theorem]{定义}
+% 设置注记环境，独立编号，和节绑定
+\newtheorem{remark}{注记}[section]
+% 让公式编号的计数器前面自动加上节，比如式 (2.1)
+\numberwithin{equation}{section}
+
+% 自定义命令，专门用于实数域和复数域
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\section*{引言}
+
+第2章通过Goursat定理和Cauchy积分公式建立了全纯函数的强大性质。第2.5节“Further applications”则是这些核心定理的直接推论和应用，它展示了Cauchy理论如何深刻地刻画全纯函数的结构。这一节的逻辑脉络可以概括为以下几个递进的层面：
+
+\begin{enumerate}
+    \item \textbf{反方向的定理：Morera定理。} 我们已有Cauchy定理（若$f$全纯，则其沿闭曲线的积分为0）。Morera定理给出了一个部分逆命题：如果一个连续函数沿任意三角形的积分为0，那么它是全纯的。这为我们提供了一种不依赖导数定义来判定函数全纯性的新方法。
+    \item \textbf{极限过程与全纯性的保持。} 利用Morera定理，我们可以证明：
+        \begin{itemize}
+            \item \textbf{一致极限保持全纯性：} 如果一个全纯函数序列在一个区域内内闭一致收敛，则其极限函数也是全纯的。
+            \item \textbf{含参变量积分定义的全纯函数：} 形如$f(z)=\int_0^1 F(z,s)ds$的函数，若被积函数$F(z,s)$对每个$s$全纯，且关于$(z,s)$连续，则$f(z)$也是全纯的。
+        \end{itemize}
+        这两个结论极大地扩展了构造全纯函数的手段，是后续研究（如用积分表示特殊函数）的理论基础。
+    \item \textbf{解析延拓的一个工具：Schwarz反射原理。} 该原理指出，如果一个全纯函数定义在关于实轴对称的区域的上半部分，并且在实轴的一段上取实数值，那么它可以被解析延拓到整个对称区域。这是一个利用对称性进行解析延拓的几何方法。
+    \item \textbf{一个深刻的逼近定理：Runge定理。} 这是本节最深刻的结果。它回答了这样一个问题：在什么条件下，一个在紧集$K$的邻域内全纯的函数可以被多项式或有理函数在$K$上一致逼近？答案是：当$K$的补集是连通的时候，就可以用多项式逼近；一般情况下，可以用极点位于$K$补集中的有理函数逼近。这显示了复变函数与拓扑性质（连通性）之间的深刻联系。
+\end{enumerate}
+
+下面我们分小节详细展开。
+
+\section{Morera定理}
+
+Morera定理是Cauchy定理的某种逆命题，它给出了一个判断函数是否全纯的积分条件。
+
+\begin{theorem}[Morera定理]
+    设$f$是开圆盘$D$上的连续函数。如果对于$D$内的任意三角形$T$，都有
+    \[
+    \int_T f(z) dz = 0,
+    \]
+    则$f$在$D$上是全纯的。
+\end{theorem}
+
+\begin{proof}
+    我们首先证明$f$有原函数。固定$z_0\in D$，对任意$z\in D$，定义
+    \[
+    F(z) = \int_{\gamma_z} f(w) dw,
+    \]
+    其中$\gamma_z$是从$z_0$到$z$的折线（先水平后垂直）。由于沿任意三角形的积分为0，可以证明$F(z)$的定义与$\gamma_z$的选择无关。然后，利用$f$的连续性，可以证明$F'(z)=f(z)$，即$F$是$f$的一个原函数。由于$F$全纯，其导数$f$也全纯。
+\end{proof}
+
+Morera定理的核心价值在于，它将全纯性的验证从“存在导数”这一局部性质，转化为了“沿三角形积分恒为零”这一整体积分条件。这使得我们能够处理那些导数形式未知或不易求出的函数。
+\begin{remark}
+    注意到定理2.1，即全纯函数在圆盘内有原函数的证明中，
+    只用了$f$的连续性.
+\end{remark}
+
+
+\section{全纯函数序列}
+
+本节的两个定理表明，全纯性在良好的极限操作下是保持的。
+
+\subsection{内闭一致极限保持全纯性}
+
+\begin{theorem}
+    设$\{f_n\}_{n=1}^\infty$是区域$\Omega$上的全纯函数序列。若$\{f_n\}$在$\Omega$的每个紧子集上一致收敛到函数$f$，则$f$在$\Omega$上是全纯的。
+\end{theorem}
+
+\begin{proof}
+    任取一个闭圆盘$\overline{D}\subset\Omega$。对$D$内的任意三角形$T$，由于$f_n$全纯，由Goursat定理知$\int_T f_n(z)dz=0$。一致收敛性保证了极限与积分可交换，故$\int_T f(z)dz = \lim_{n\to\infty}\int_T f_n(z)dz = 0$。由Morera定理，$f$在$D$上全纯。由于$D$的任意性，$f$在$\Omega$上全纯。
+\end{proof}
+
+这个结果在实分析中是不成立的（连续函数的极限不一定是可导的），它体现了全纯函数的刚性。作为推论，我们可以得到导数序列的收敛性。
+
+\begin{theorem}
+    在上述定理的假设下，导函数序列$\{f_n'\}$也在$\Omega$的每个紧子集上一致收敛到$f'$。
+\end{theorem}
+
+\subsection{含参变量积分定义的全纯函数}
+
+这个定理是构造特殊函数（如Gamma函数、Zeta函数）的常用工具。
+
+\begin{theorem}
+    设$F(z,s)$是定义在$\Omega\times[0,1]$上的函数，满足：
+    \begin{enumerate}
+        \item 对每个固定的$s\in[0,1]$，$F(z,s)$是$z$的全纯函数。
+        \item $F(z,s)$在$\Omega\times[0,1]$上连续。
+    \end{enumerate}
+    则函数
+    \[
+    f(z) = \int_0^1 F(z,s) ds
+    \]
+    在$\Omega$上是全纯的。
+\end{theorem}
+
+\begin{proof}
+    用黎曼和逼近积分，即令$f_n(z)=\frac{1}{n}\sum_{k=1}^n F(z,k/n)$。由条件(i)，每个$f_n(z)$是$\Omega$上的全纯函数。由条件(ii)，$f_n$在$\Omega$的紧子集上一致收敛到$f$。因此由前一定理，$f$是$\Omega$上的全纯函数。
+\end{proof}
+
+\section{Schwarz反射原理}
+
+该原理描述了一种利用对称性进行解析延拓的方法。
+\begin{theorem}[对称原理]
+    设$\Omega$是关于实轴对称的区域，记$\Omega^+=\{z\in\Omega:\operatorname{Im}z>0\}$，$\Omega^-=\{z\in\Omega:\operatorname{Im}z<0\}$，$I=\Omega\cap\RR$。若$f^+$在$\Omega^+$上全纯，$f^-$在$\Omega^-$上全纯，且它们都能连续延拓到$I$，并且满足
+    \[
+    f^+(x)=f^-(x) \quad \text{对所有 } x\in I,
+    \]
+    则定义在$\Omega$上的函数
+    \[
+    f(z)=\begin{cases}
+        f^+(z), & z\in\Omega^+,\\
+        f^-(z), & z\in\Omega^-,\\
+        f^+(x), & z=x\in I,
+    \end{cases}
+    \]
+    在整个$\Omega$上是全纯的。
+\end{theorem}
+
+\begin{proof}
+    由假设，$f$在整个$\Omega$上连续。要证明$f$在$I$上的点也全纯，只需证明在任意以$I$上一点为中心的小圆盘$D$内，$f$满足Morera定理的条件。任取$D$内的一个三角形$T$，如果$T$完全不与$I$相交，则$T$要么完全落在$\Omega^+$内，要么完全落在$\Omega^-$内，此时由$f$在该区域的全纯性知$\int_T f=0$。如果$T$与$I$相交，则可以将$T$剖分成若干个小三角形，使得每个小三角形要么不接触$I$，要么恰有一条边在$I$上。对于恰有一条边在$I$上的三角形，可以通过将该边稍微向上（或向下）平移得到一个完全位于$\Omega^+$（或$\Omega^-$）内的近似三角形，利用该近似三角形上的积分为零，再取极限（利用$f$的连续性）即可得到原三角形的积分为零。因此，$f$在$D$上满足Morera定理的条件，故$f$在$D$上全纯，特别地，在$I$的点上全纯。
+\end{proof}
+
+对称原理表明，只要两个定义在对称半区域上的全纯函数在实轴上的边界值一致，它们就能自然地拼成一个整体全纯函数。这一原理是接下来Schwarz反射原理的核心工具。
+
+
+\begin{theorem}[Schwarz反射原理]
+    设$\Omega$是关于实轴对称的区域，记$\Omega^+=\{z\in\Omega:\operatorname{Im}z>0\}$，$I=\Omega\cap\RR$。若$f$在$\Omega^+$上全纯，且能连续延拓到$I$上，并在$I$上取实数值（即$f(x)\in\RR$ for $x\in I$），则存在$F$在$\Omega$上全纯，使得$F(z)=f(z)$ for $z\in\Omega^+$。
+\end{theorem}
+
+\begin{proof}
+    对于$z\in\Omega^-=\{z\in\Omega:\operatorname{Im}z<0\}$，定义
+    \[
+    F(z) = \overline{f(\overline{z})}.
+    \]
+    可以验证$F$在$\Omega^-$上全纯。由于$f$在$I$上取实数值，$F$在$I$上连续且与$f$的极限值相等。最后，应用对称性原理（即定理5.5）将$\Omega^+$和$\Omega^-$上的函数拼接起来，得到整个$\Omega$上的全纯函数。
+\end{proof}
+
+这个原理允许我们将上半平面（或上半个区域）的全纯函数，通过“共轭反射”的方式，延拓到整个平面（或对称区域）。它在处理具有实对称性的边值问题时非常有用。
+
+\section{Runge逼近定理}
+
+Runge定理是复分析中一个深刻的逼近结果。
+
+\begin{theorem}[Runge定理]
+    设$K\subset\CC$是紧集，$f$在$K$的一个邻域内全纯。则存在有理函数序列$\{R_n\}$，其极点都位于$K$的补集中，且在$K$上一致收敛到$f$。
+    
+    特别地，如果$K$的补集$\CC\setminus K$是连通的，那么$f$可以被多项式序列在$K$上一致逼近。
+\end{theorem}
+
+这个定理的逻辑证明分为几个关键步骤：
+
+\begin{enumerate}
+    \item \textbf{积分表示：} 利用Cauchy积分公式，将$f(z)$表示为沿着一些远离$K$的线段$\gamma_n$的积分：
+    \[
+    f(z) = \sum_{n=1}^N \frac{1}{2\pi i} \int_{\gamma_n} \frac{f(\zeta)}{\zeta - z} d\zeta.
+    \]
+    这些$\gamma_n$是某个网格中不与$K$相交的“边界”线段。
+
+    \item \textbf{用有理函数逼近积分：} 对于每个这样的积分$\int_{\gamma_n} \frac{f(\zeta)}{\zeta - z} d\zeta$，可以用黎曼和来逼近它。黎曼和形如$\sum \frac{f(\zeta_j)}{\zeta_j - z} \Delta\zeta_j$，这是关于$z$的有理函数，其极点就是这些采样点$\zeta_j$，它们都位于$\gamma_n\subset \CC\setminus K$上。因此，$f$可以被极点位于$K$补集中的有理函数一致逼近。
+
+    \item \textbf{将极点“推”到无穷远：} 如果$\CC\setminus K$是连通的，我们可以通过一个“路径移动”的技巧，将任意一个不在$K$中的极点$z_0$，通过一系列连续的步骤，移动到“无穷远点”。每一步都对应于用一个多项式序列逼近形如$\frac{1}{z-z_0}$的函数。这个技巧依赖于$\CC\setminus K$的连通性，保证了我们可以从$z_0$出发，沿着一条不经过$K$的曲线，最终“走到无穷远”。经过足够多的步骤，所有的有理函数都可以被多项式逼近。
+\end{enumerate}
+
+因此，Runge定理将复分析中的逼近问题与区域拓扑的连通性紧密联系在了一起。
+
+\section*{总结}
+
+第2.5节是对第2章核心成果的深化与拓展。它从Cauchy理论出发，依次得到了：
+\begin{itemize}
+    \item 判定全纯性的新方法（Morera定理）；
+    \item 全纯函数在极限和积分操作下的稳定性；
+    \item 一种基于对称性的解析延拓技术（Schwarz反射）；
+    \item 一个连接全纯逼近与集合拓扑连通性的深刻定理（Runge定理）。
+\end{itemize}
+这些结果不仅本身非常重要，也为后续章节（如级数表示、特殊函数、保形映射等）的学习奠定了坚实的理论基础。
+
+\end{document}
