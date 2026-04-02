@@ -49,7 +49,11 @@
 对于全纯函数的零点，教材给出了如下极其重要的局部结构定理：
 
 \begin{theorem}
-假设 $f$ 在连通开集 $\Omega$ 上全纯，在 $z_0 \in \Omega$ 处有一个零点，且 $f$ 在 $\Omega$ 上不恒为零。那么存在 $z_0$ 的一个邻域 $U \subset \Omega$，一个在 $U$ 上无零点的全纯函数 $g$，以及一个唯一的正整数 $n$，使得对所有 $z \in U$ 有：
+假设 $f$ 在连通开集 $\Omega$ 上全纯，
+在 $z_0 \in \Omega$ 处有一个零点，
+且 $f$ 在 $\Omega$ 上不恒为零。
+那么存在 $z_0$ 的一个邻域 $U \subset \Omega$，
+一个在 $U$ 上\textbf{无零点}的全纯函数 $g$，以及一个唯一的正整数 $n$，使得对所有 $z \in U$ 有：
 $$ f(z) = (z-z_0)^n g(z) $$ [cite: 158]
 \end{theorem}
 
@@ -72,6 +76,11 @@ $$ f(z) = (z-z_0)^{-n} h(z) $$ [cite: 159]
 $$ f(z) = \frac{a_{-n}}{(z-z_0)^n} + \frac{a_{-n+1}}{(z-z_0)^{n-1}} + \dots + \frac{a_{-1}}{z-z_0} + G(z) $$
 其中 $G(z)$ 在 $z_0$ 的邻域内全纯 [cite: 160]。
 \end{theorem}
+
+\begin{proof}
+    $ f(z) = (z-z_0)^{-n} h(z) $,h是全纯的,
+    故对$h(z)$进行幂级数展开,并且带入这个式子即可证明
+\end{proof}
 
 \begin{definition}
 上式中的负幂次部分 $\sum_{k=1}^n a_{-k}(z-z_0)^{-k}$ 称为 $f$ 在 $z_0$ 处的\textbf{主部分 (Principal part)} [cite: 160]。系数 $a_{-1}$ 称为 $f$ 在该极点处的\textbf{留数 (Residue)}，记作 $\mathrm{res}_{z_0} f = a_{-1}$ [cite: 160]。

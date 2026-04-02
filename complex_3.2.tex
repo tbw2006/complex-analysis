@@ -31,46 +31,130 @@
 
 \maketitle
 
-\section{逻辑脉络 (Logical Flow)}
-本节是复变函数中最核心、最实用的部分之一。其逻辑脉络承前启后，将 3.1 节中纯局部的概念（留数）与第 2 章中的全局积分工具（柯西定理）完美结合，并最终落地于解决实际的微积分问题。具体脉络如下：
-\begin{enumerate}
-    \item \textbf{单极点圆周积分}：首先解决最基本的情形——如果积分路径是一个圆，且内部只有一个极点，积分结果是什么？利用“钥匙孔”（keyhole）围道，将问题转化为绕极点的小圆积分，从而提取出留数。
-    \item \textbf{多极点与一般围道推广}：从单极点圆周推广到多极点圆周，再进一步推广到包含多个极点的“玩具围道”（Toy contour，如矩形、半圆等）。这确立了著名的\textbf{留数公式}：闭曲线积分完全由其内部包围的所有极点的留数之和决定。
-    \item \textbf{方法落地：计算实积分}：留数公式的最强大应用在于计算广义黎曼积分（如 $\int_{-\infty}^\infty f(x)dx$）。教材在 3.2.1 小节中通过三个递进的经典例子，展示了如何通过“解析延拓 $\to$ 构造闭合围道 $\to$ 控制边界积分 $\to$ 计算内部留数”的标准化流程，将困难的实积分转化为简单的代数计算。
-\end{enumerate}
+\section{引言}
 
-\section{主要内容梳理 (Main Content)}
+在上一章（Cauchy 定理）中我们已经知道：如果 \(f\) 在闭合曲线 \(\gamma\) 内部及边界上解析，则
+\[
+\int_{\gamma} f(z)\,dz = 0.
+\]
+那么，如果 \(f\) 在 \(\gamma\) 内部有孤立奇点（例如极点），积分还会是零吗？答案是否定的。最简单的例子是 \(f(z)=1/z\)，绕原点一周的积分为 \(2\pi i\)。本节的核心问题正是：如何计算这种围道积分？答案就是著名的\textbf{留数公式}。
 
-\subsection{留数公式 (The Residue Formula)}
-教材首先给出了单一极点在圆周内的情况，并随后将其推广到最一般的形式：
+\section{主要结果：留数定理}
 
-\begin{theorem}[留数公式]
-假设 $f$ 在包含“玩具围道”（Toy contour）$\gamma$ 及其内部的开集上全纯，除了在 $\gamma$ 内部的有限个点 $z_1, z_2, \dots, z_N$ 处有极点。假定 $\gamma$ 具有正定向（逆时针），那么：
-$$ \int_\gamma f(z) dz = 2\pi i \sum_{k=1}^N \mathrm{res}_{z_k} f $$
+\subsection{圆盘情形}
+\begin{theorem}[留数定理，圆盘情形]
+设 \(f\) 在包含圆盘 \(\overline{D}\) 的某开集上解析，除去圆心处的一个极点 \(z_0\)，则
+\[
+\int_{C} f(z)\,dz = 2\pi i \cdot \operatorname{Res}_{z_0}f,
+\]
+其中 \(C\) 是正向圆周，\(\operatorname{Res}_{z_0}f\) 表示 \(f\) 在 \(z_0\) 处的留数。
+\end{theorem}
+
+\subsection{多个极点}
+\begin{theorem}[留数定理，多个极点]
+若 \(f\) 在圆盘内除有限个极点 \(z_1,\dots,z_N\) 外解析，则
+\[
+\int_{C} f(z)\,dz = 2\pi i \sum_{k=1}^{N} \operatorname{Res}_{z_k}f.
+\]
+\end{theorem}
+
+\subsection{一般围道}
+\begin{theorem}[留数定理，一般围道]
+对任意\textbf{玩具围道}（toy contour）\(\gamma\) 及其内部，只要 \(f\) 在 \(\gamma\) 内部除有限个极点外解析，则有
+\[
+\int_{\gamma} f(z)\,dz = 2\pi i \sum_{\text{内部极点}} \operatorname{Res}_{z_k}f.
+\]
 \end{theorem}
 
 \begin{remark}
-\textbf{证明的核心思想}：通过构造“多重钥匙孔”围道（multiple keyhole），利用柯西定理将沿着大围道 $\gamma$ 的积分，转化为沿着环绕各个极点 $z_k$ 的小圆 $C_k$ 的积分之和。对于每个小圆 $C_k$，函数 $f(z)$ 可写为全纯部分 $G(z)$ 与主部分（Principal part）之和，而全纯部分与所有 $(z-z_k)^{-m} (m > 1)$ 的项积分均为 0，唯独剩下 $(z-z_k)^{-1}$ 的系数（即留数），每次积出 $2\pi i \cdot \mathrm{res}_{z_k} f$。
+这里“玩具围道”是指边界简单、内部可以明确定义的一类曲线（如圆、矩形、钥匙孔形等），其上 Cauchy 定理和留数公式均成立。
 \end{remark}
 
-\subsection{留数公式的应用：计算实积分}
-留数微积分（Calculus of residues）提供了一种计算各种定积分的强大技术。核心思想是将定义在实轴上的函数 $f(x)$ 扩展为复平面上的函数 $f(z)$，然后选择一个包含实轴某一段 $[-R, R]$ 的合适的闭合玩具围道 $\gamma_R$，使得当 $R \to \infty$ 时，其余边界上的积分趋于零或容易处理。
+\section{证明的逻辑脉络}
 
-教材通过三个经典例子展示了不同的围道选择策略：
+\subsection{简化到单个极点}
+使用\textbf{钥匙孔围道}（keyhole contour）技巧：
+\begin{itemize}
+\item 构造一个大围道，包含所有极点，再在每个极点处挖一个很小的圆 \(C_{\epsilon}\) 绕开极点。
+\item 让钥匙孔两侧的缝隙趋于零，由于 \(f\) 在缝隙两侧连续，积分相互抵消。
+\item 最终得到：大围道上的积分 = 各个小圆上积分的和（注意小圆的取向与大围道相反）。
+\end{itemize}
 
-\paragraph{例1：半圆围道 (Semicircle Contour)}
-计算积分：
-$$ \int_{-\infty}^\infty \frac{dx}{1+x^2} = \pi $$
-\textbf{策略}：考虑复函数 $f(z) = 1/(1+z^2)$，它在 $z = \pm i$ 处有简单极点。构造由实轴线段 $[-R, R]$ 和上半平面的大半圆 $C_R^+$ 组成的闭合围道 $\gamma_R$。由于上半平面内只有极点 $z=i$，其留数为 $1/(2i)$。当 $R \to \infty$ 时，由于分母是 $z^2$ 级别，大半圆上的积分被压制为 $0$。因此实积分直接等于 $2\pi i \cdot (1/2i) = \pi$。
+\subsection{计算单个小圆上的积分}
+在极点 \(z_0\) 附近，\(f\) 可以展开为 \textbf{Laurent 级数}：
+\[
+f(z) = \frac{a_{-n}}{(z-z_0)^n} + \cdots + \frac{a_{-1}}{z-z_0} + G(z),
+\]
+其中 \(G(z)\) 解析（即不含负幂项）。
+\begin{itemize}
+\item 对 \(\frac{a_{-1}}{z-z_0}\) 绕小圆积分：
+\[
+\int_{C_{\epsilon}} \frac{a_{-1}}{z-z_0}\,dz = 2\pi i a_{-1}.
+\]
+\item 对 \(\frac{a_{-k}}{(z-z_0)^k}\;(k\ge 2)\) 积分：由于原函数为 \(\frac{a_{-k}}{(1-k)(z-z_0)^{k-1}}\) 是单值函数，闭路积分为 \(0\)。
+\item 对 \(G(z)\)（解析）积分：由 Cauchy 定理为 \(0\)。
+\end{itemize}
+所以小圆积分 \(= 2\pi i a_{-1}\)，即 \(2\pi i\) 乘以留数。
 
-\paragraph{例2：矩形围道 (Rectangle Contour)}
-计算积分（其中 $0 < a < 1$）：
-$$ \int_{-\infty}^\infty \frac{e^{ax}}{1+e^x} dx = \frac{\pi}{\sin \pi a} $$
-\textbf{策略}：对于含有指数函数的被积函数，通常选择\textbf{矩形围道}。考虑 $f(z) = e^{az}/(1+e^z)$，极点位于分母为零处，即 $z = \pi i$。取顶点为 $-R, R, R+2\pi i, -R+2\pi i$ 的矩形。因为 $e^z$ 的周期性为 $2\pi i$，矩形上下两边的积分可以合并（差一个常数因子 $e^{2\pi i a}$），而左右两竖边的积分在 $R \to \infty$ 时趋于零，从而通过留数求出原积分。
+\subsection{得到留数公式}
+将所有极点贡献相加，即得
+\[
+\int_{\gamma} f(z)\,dz = 2\pi i \sum \operatorname{Res}.
+\]
 
-\paragraph{例3：带振荡因子的矩形围道}
-证明双曲正割函数的一个变体是其自身的傅里叶变换：
-$$ \int_{-\infty}^\infty \frac{e^{-2\pi i x \xi}}{\cosh \pi x} dx = \frac{1}{\cosh \pi \xi} $$
-\textbf{策略}：与例2类似，利用被积函数中 $\cosh(\pi z)$ 的周期特性，同样选取适当高度的矩形围道。此例中内部包含两个简单极点 $\alpha = i/2$ 和 $\beta = 3i/2$。计算它们的留数并处理矩形顶部路径带来的振荡与衰减，最后合并得到结果。这为后续章节（如 Theta 函数、双平方和定理）中研究此函数奠定了基础。
+\section{留数的计算方法}
+\begin{definition}
+\(f\) 在孤立奇点 \(z_0\) 处的\textbf{留数}为 Laurent 展开中 \((z-z_0)^{-1}\) 项的系数，记为 \(\operatorname{Res}_{z_0}f\)。
+\end{definition}
+
+\begin{theorem}[留数的计算]
+\begin{itemize}
+\item 若 \(z_0\) 是\textbf{可去奇点}，则留数为 \(0\)。
+\item 若 \(z_0\) 是\textbf{简单极点}（一阶极点）：
+\[
+\operatorname{Res}_{z_0}f = \lim_{z\to z_0} (z-z_0)f(z).
+\]
+\item 若 \(z_0\) 是 \(n\) 阶极点：
+\[
+\operatorname{Res}_{z_0}f = \frac{1}{(n-1)!}\lim_{z\to z_0}\frac{d^{n-1}}{dz^{n-1}}\big[(z-z_0)^n f(z)\big].
+\]
+\end{itemize}
+\end{theorem}
+
+\section{典型例子}
+
+\subsection{例1：\(\displaystyle \int_{-\infty}^{\infty} \frac{dx}{1+x^2} = \pi\)}
+考虑 \(f(z)=\frac{1}{1+z^2}\)，在 \(z=i\) 处有一阶极点（上半平面）。取上半平面的大半圆围道 \(\gamma_R\)（实轴线段 \([-R,R]\) + 上半圆弧 \(C_R^+\)）。由留数定理：
+\[
+\int_{\gamma_R} f(z)\,dz = 2\pi i \cdot \operatorname{Res}_{z=i}f = 2\pi i \cdot \frac{1}{2i} = \pi.
+\]
+当 \(R\to\infty\) 时，圆弧上的积分趋于 \(0\)（因为 \(|f(z)|\sim 1/R^2\)），所以实轴上的积分趋于 \(\pi\)。被积函数为偶函数，故 \(\int_{-\infty}^{\infty} = \pi\)。
+
+\subsection{例2：\(\displaystyle \int_{-\infty}^{\infty} \frac{e^{ax}}{1+e^x}dx = \frac{\pi}{\sin\pi a},\quad 0<a<1\)}
+用矩形围道（高 \(2\pi\)），顶点在 \(R,\, R+2\pi i,\,-R+2\pi i,\,-R\)。内部只有 \(z=\pi i\) 一个简单极点，留数为 \(-e^{a\pi i}\)。上下水平边的积分差给出
+\[
+(1-e^{2\pi i a})I = -2\pi i e^{a\pi i},
+\]
+解得 \(I = \pi/\sin\pi a\)。
+
+\subsection{例3：\(\displaystyle \int_{-\infty}^{\infty} \frac{e^{-2\pi i x\xi}}{\cosh\pi x}dx = \frac{1}{\cosh\pi\xi}\)}
+类似地用矩形围道（高 \(2\)），内部有极点 \(z=i/2\) 和 \(z=3i/2\)。通过留数计算和上下边积分抵消，得到傅里叶变换的自对偶性。
+
+这些例子展示了留数公式的强大：将实积分转化为围道积分，再通过极点留数计算。
+
+\section{逻辑总结}
+整个第 3.2 节的逻辑可以概括为：
+\begin{itemize}
+\item \textbf{已知}：若 \(f\) 在闭曲线内部解析，积分为零（Cauchy 定理）；若 \(f\) 有极点，则 Laurent 展开中含有负幂次项，其中 \(-1\) 次项贡献非零积分。
+\item \textbf{推导}：通过“挖掉极点”的技巧，将原围道积分化为围绕各个极点的小圆积分之和。每个小圆积分只由留数决定，高阶负幂项积分为零。因此得到\textbf{留数公式}。
+\item \textbf{应用}：计算实积分（尤其是有理函数、三角函数、指数函数的 Fourier 变换），为后续的幅角原理、零点计数等打下基础。
+\end{itemize}
+
+\section{与前后章节的联系}
+\begin{itemize}
+\item 前一节（3.1）定义了极点、主部、留数，并给出了计算方法。
+\item 本节（3.2）正式建立留数公式，并用例子演示。
+\item 后续章节（3.4 幅角原理、3.5 同伦与单连通区域）会进一步推广留数公式的使用场景，并用于计算零点个数等。
+\end{itemize}
 
 \end{document}

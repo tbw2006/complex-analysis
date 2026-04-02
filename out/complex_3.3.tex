@@ -1,0 +1,172 @@
+% UTF8 表示使用通用国际字符作为内码，ctexart 表示这是一篇中文论文
+\documentclass[UTF8]{ctexart} 
+% 通过调用宏包 geometry 调整页面设置为 A4 纸，页边距 2.6 cm
+\usepackage[a4paper,margin=2.6cm]{geometry}
+
+\usepackage{amsmath, amssymb, amsthm} % 数学公式、符号、定理
+\usepackage{graphicx}                 % 插图
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref} % 超链接与交叉引用
+
+% 设置文章标题
+\title{复变函数学习笔记：3.3节“奇点与亚纯函数”}
+% 设置撰写日期
+\date{}
+
+% 设置环境 theorem (这是用户自定义环境名，相当于一个变量)
+\newtheorem{theorem}{定理}[section]
+% 设置引理环境，直接套用theorem，后果是和定理共享编号
+\newtheorem{lemma}[theorem]{引理}
+% 设置定义环境，和定理共享编号
+\newtheorem{definition}[theorem]{定义}
+% 设置推论环境
+\newtheorem{corollary}[theorem]{推论}
+% 设置注记环境，独立编号，和节绑定
+\newtheorem{remark}{注记}[section]
+% 让公式编号的计数器前面自动加上节，比如式 (2.1)
+\numberwithin{equation}{section}
+
+% 自定义命令，专门用于实数域和复数域
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+本节的核心任务是对孤立奇点进行分类（可去奇点、极点、本质奇点），并研究各类奇点的特征。随后引入亚纯函数的概念，并证明扩展复平面上的亚纯函数就是有理函数。最后简要介绍 Riemann 球面。
+
+\section{孤立奇点的分类}
+设 \(f\) 在去心邻域 \(0<|z-z_0|<r\) 内解析，称 \(z_0\) 为 \(f\) 的\textbf{孤立奇点}。根据 Laurent 展开或函数在 \(z_0\) 附近的行为，分为三类：
+\begin{itemize}
+\item \textbf{可去奇点} (removable singularity)：存在 \(\lim_{z\to z_0} f(z) = L\in \CC\)（有限）。
+\item \textbf{极点} (pole)：\(\lim_{z\to z_0} |f(z)| = \infty\)。
+\item \textbf{本质奇点} (essential singularity)：既不是可去也不是极点。
+\end{itemize}
+本节的主要定理为这些分类提供了严格的分析判别法。
+
+\section{定理 3.1：Riemann 可去奇点定理}
+\begin{theorem}[Riemann 可去奇点定理]
+设 \(f\) 在去心邻域 \(0<|z-z_0|<r\) 内解析。若 \(f\) 在该去心邻域内有界，则 \(z_0\) 是可去奇点（即 \(f\) 可解析延拓到 \(z_0\)）。
+\end{theorem}
+
+\begin{proof}
+取小圆 \(C\) 以 \(z_0\) 为中心，半径为 \(\rho<r\)。对任意 \(z\neq z_0\) 且 \(|z-z_0|<\rho\)，考虑钥匙孔围道（如图 4 所示）同时避开 \(z\) 和 \(z_0\)。设两侧缝隙趋于零，并在钥匙孔围道上应用 Cauchy 定理，得到
+\[
+\int_C \frac{f(\zeta)}{\zeta-z}\,d\zeta + \int_{\gamma_\epsilon} \frac{f(\zeta)}{\zeta-z}\,d\zeta + \int_{\gamma_\epsilon'} \frac{f(\zeta)}{\zeta-z}\,d\zeta = 0,
+\]
+其中 \(\gamma_\epsilon\) 是绕 \(z\) 的小圆（负向），\(\gamma_\epsilon'\) 是绕 \(z_0\) 的小圆（负向）。由 Cauchy 积分公式，
+\[
+\int_{\gamma_\epsilon} \frac{f(\zeta)}{\zeta-z}\,d\zeta = -2\pi i f(z).
+\]
+由于 \(f\) 有界，且 \(\zeta\) 在 \(\gamma_\epsilon'\) 上保持远离 \(z\)，有
+\[
+\left|\int_{\gamma_\epsilon'} \frac{f(\zeta)}{\zeta-z}\,d\zeta\right| \le C\epsilon \to 0 \quad (\epsilon\to0).
+\]
+令 \(\epsilon\to0\) 得
+\[
+f(z) = \frac{1}{2\pi i}\int_C \frac{f(\zeta)}{\zeta-z}\,d\zeta.
+\]
+右端定义了一个在 \(|z-z_0|<\rho\) 上全纯的函数，且在 \(z\neq z_0\) 时等于 \(f(z)\)。因此 \(f\) 可解析延拓到 \(z_0\)。
+\end{proof}
+
+\begin{corollary}
+若 \(f\) 在去心邻域内解析且 \(\lim_{z\to z_0}(z-z_0)f(z)=0\)，则 \(z_0\) 是可去奇点。
+\end{corollary}
+
+\section{极点与函数趋于无穷的等价性}
+\begin{theorem}\label{thm:pole}
+设 \(z_0\) 是 \(f\) 的孤立奇点。则 \(z_0\) 是极点当且仅当 \(\lim_{z\to z_0}|f(z)| = \infty\)。
+\end{theorem}
+
+\begin{proof}
+\textbf{必要性：} 若 \(z_0\) 是 \(n\) 阶极点，则存在 \(h(z)\) 在 \(z_0\) 处解析且 \(h(z_0)\neq0\)，使得 \(f(z)=(z-z_0)^{-n}h(z)\)。于是 \(|f(z)|\to\infty\) 当 \(z\to z_0\)。
+
+\textbf{充分性：} 若 \(|f(z)|\to\infty\)，则 \(1/f(z)\) 在去心邻域内解析且趋于 \(0\)。由 Riemann 可去奇点定理，\(1/f(z)\) 可解析延拓到 \(z_0\)，且延拓后的值 \(g(z_0)=0\)。因此 \(g\) 在 \(z_0\) 处有零点，设为 \(m\) 阶，即 \(g(z)=(z-z_0)^m h(z)\)，\(h(z_0)\neq0\)。于是
+\[
+f(z) = \frac{1}{g(z)} = (z-z_0)^{-m} \cdot \frac{1}{h(z)},
+\]
+故 \(z_0\) 是 \(m\) 阶极点。
+\end{proof}
+
+\section{本质奇点与 Casorati–Weierstrass 定理}
+\begin{theorem}[Casorati–Weierstrass]
+若 \(z_0\) 是 \(f\) 的本质奇点，则 \(f\) 在 \(z_0\) 的任何去心邻域内的像在 \(\CC\) 中稠密。即：对任意 \(w\in\CC\) 和任意 \(\epsilon>0\)，存在 \(z\) 满足 \(0<|z-z_0|<\delta\) 使得 \(|f(z)-w|<\epsilon\)。
+\end{theorem}
+
+\begin{proof}
+用反证法。假设存在 \(w\in\CC\) 和 \(\delta>0\) 使得对所有 \(0<|z-z_0|<\delta\) 有 \(|f(z)-w|>\delta\)。定义
+\[
+g(z) = \frac{1}{f(z)-w},
+\]
+则 \(g\) 在去心邻域内解析且有界（\(|g|\le 1/\delta\)）。由 Riemann 可去奇点定理，\(g\) 可解析延拓到 \(z_0\)。
+\begin{itemize}
+\item 若 \(g(z_0)\neq0\)，则 \(f(z)=w+1/g(z)\) 在 \(z_0\) 解析，矛盾。
+\item 若 \(g(z_0)=0\)，则 \(f(z)=w+1/g(z)\) 在 \(z_0\) 有极点（因为 \(1/g\) 有极点），也与本质奇点矛盾。
+\end{itemize}
+因此假设错误，像集必稠密。
+\end{proof}
+
+\begin{remark}
+该定理表明本质奇点附近函数行为极其“混乱”。更深刻的 Picard 大定理断言：本质奇点处 \(f\) 取每个复数值无穷多次，至多一个例外。
+\end{remark}
+
+\section{亚纯函数}
+\begin{definition}
+设 \(\Omega\subset\CC\) 为开集。\(f\) 在 \(\Omega\) 上\textbf{亚纯}是指存在一个无极限点的点集 \(\{z_0,z_1,\dots\}\subset\Omega\)，使得：
+\begin{itemize}
+\item \(f\) 在 \(\Omega\setminus\{z_0,z_1,\dots\}\) 上解析；
+\item 每个 \(z_j\) 都是 \(f\) 的极点。
+\end{itemize}
+换句话说，亚纯函数是“只有极点作为奇点”的解析函数。
+\end{definition}
+
+\section{扩展复平面上的亚纯函数与有理函数}
+\begin{theorem}
+扩展复平面 \(\widehat{\CC}=\CC\cup\{\infty\}\)（即 Riemann 球面）上的亚纯函数一定是\textbf{有理函数}（即两个多项式的商）。
+\end{theorem}
+
+\begin{proof}
+设 \(f\) 在 \(\widehat{\CC}\) 上亚纯。
+\begin{enumerate}
+\item \(f\) 在 \(\CC\) 上只有有限多个极点。因为若有无穷多个极点，它们必在 \(\CC\) 中聚集，但由亚纯函数定义，极点集无极限点，故只能是有限个。设这些极点为 \(z_1,\dots,z_n\)（可能包括无穷远点）。
+\item 在每个极点 \(z_k\)（有限处）写出其主部：
+   \[
+   f(z) = P_k\left(\frac{1}{z-z_k}\right) + \text{解析部分},
+   \]
+   其中 \(P_k\) 是一个多项式（无常数项）。类似地，在 \(\infty\) 处考虑 \(f(1/w)\) 在 \(w=0\) 的主部 \(P_\infty(1/w)\)，对应 \(f(z)\) 在无穷远的主部为 \(P_\infty(z)\)（多项式）。
+\item 考虑函数
+   \[
+   H(z) = f(z) - \sum_{k=1}^n P_k\left(\frac{1}{z-z_k}\right) - P_\infty(z).
+   \]
+   则 \(H\) 在 \(\CC\) 上全纯（因为所有极点的主部都被减去了），且 \(H(1/w)\) 在 \(w=0\) 解析（因为无穷远的主部也被减去了），故 \(H\) 在 \(\widehat{\CC}\) 上全纯，从而是常数（Liouville 定理在球面上的推广：全纯函数在紧 Riemann 面上必为常数）。
+\item 因此 \(f\) 等于一个常数加上有限个主部的和，每个主部是有理函数（多项式的商），故 \(f\) 是有理函数。
+\end{enumerate}
+\end{proof}
+
+\begin{corollary}
+有理函数由它的零点、极点（包括无穷远点）及其阶数唯一确定（相差一个非零常数因子）。
+\end{corollary}
+
+\section{Riemann 球面}
+\begin{definition}
+将 \(\CC\) 与球面 \(\mathbb{S}^2\) 通过\textbf{球极投影}等同，加上无穷远点 \(\infty\) 对应北极。得到的空间称为 \textbf{Riemann 球面} \(\widehat{\CC}\)。
+\end{definition}
+
+Riemann 球面是一个紧致黎曼面，具有球面拓扑。在 Riemann 球面上，极点不再特殊（对应到北极），亚纯函数成为球面到球面的全纯映射。定理 3.4 说明：球面上的全纯自映射（亚纯函数）必为有理函数。
+
+\section{逻辑脉络总结}
+本节沿着以下思路展开：
+\begin{enumerate}
+\item \textbf{分类孤立奇点} → 可去、极点、本质。
+\item \textbf{可去奇点的判定}：有界 → 可去（Riemann 定理）。证明核心：钥匙孔围道 + Cauchy 积分公式，将 \(f\) 表示成积分，从而解析延拓。
+\item \textbf{极点的等价条件}：函数值趋于无穷。证明利用 \(1/f\) 有界且趋于 0，由可去奇点定理推出 \(1/f\) 有零点，从而 \(f\) 有极点。
+\item \textbf{本质奇点的特征}：像集稠密（Casorati–Weierstrass）。证明利用反证法和可去奇点定理。
+\item \textbf{亚纯函数}：只有极点作为奇点的函数。
+\item \textbf{扩展复平面上的亚纯函数} → 有理函数。证明通过减去所有主部（有限和无穷远）得到全纯函数，由 Liouville 定理推出常数。
+\item \textbf{Riemann 球面}：提供一个紧致化视角，统一处理无穷远点。
+\end{enumerate}
+
+整个第 3.3 节是后续章节（如留数计算、幅角原理、整函数理论）的基础。特别是极点的局部展开（主部）为下一节的留数公式提供了直接工具。
+
+\end{document}
