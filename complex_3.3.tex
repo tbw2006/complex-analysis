@@ -1,0 +1,351 @@
+% UTF8 表示使用通用国际字符作为内码，ctexart 表示这是一篇中文论文
+\documentclass[UTF8]{ctexart} 
+% 通过调用宏包 geometry 调整页面设置为 A4 纸，页边距 2.6 cm
+\usepackage[a4paper,margin=2.6cm]{geometry}
+
+\usepackage{amsmath, amssymb, amsthm} % 数学公式、符号、定理
+\usepackage{graphicx}                 % 插图
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref} % 超链接与交叉引用
+
+% 设置文章标题
+\title{复变函数学习笔记：3.3节“奇点与亚纯函数”}
+% 设置撰写日期
+\date{}
+
+% 设置环境 theorem (这是用户自定义环境名，相当于一个变量)
+\newtheorem{theorem}{定理}[section]
+% 设置引理环境，直接套用theorem，后果是和定理共享编号
+\newtheorem{lemma}[theorem]{引理}
+% 设置定义环境，和定理共享编号
+\newtheorem{definition}[theorem]{定义}
+% 设置推论环境
+\newtheorem{corollary}[theorem]{推论}
+% 设置注记环境，独立编号，和节绑定
+\newtheorem{remark}{注记}[section]
+% 让公式编号的计数器前面自动加上节，比如式 (2.1)
+\numberwithin{equation}{section}
+
+% 自定义命令，专门用于实数域和复数域
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+本节的核心任务是对孤立奇点进行分类（可去奇点、极点、本质奇点），并研究各类奇点的特征。随后引入亚纯函数的概念，并证明扩展复平面上的亚纯函数就是有理函数。最后简要介绍 Riemann 球面。
+
+\section{孤立奇点的分类}
+设 \(f\) 在去心邻域 \(0<|z-z_0|<r\) 内解析，称 \(z_0\) 为 \(f\) 的\textbf{孤立奇点}。根据 Laurent 展开或函数在 \(z_0\) 附近的行为，分为三类：
+\begin{itemize}
+\item \textbf{可去奇点} (removable singularity)：存在 \(\lim_{z\to z_0} f(z) = L\in \CC\)（有限）。
+\item \textbf{极点} (pole)：\(\lim_{z\to z_0} |f(z)| = \infty\)。
+\item \textbf{本质奇点} (essential singularity)：既不是可去也不是极点。
+\end{itemize}
+本节的主要定理为这些分类提供了严格的分析判别法。
+
+\section{定理 3.1：Riemann 可去奇点定理}
+\begin{theorem}[Riemann 可去奇点定理]
+设 \(f\) 在去心邻域 \(0<|z-z_0|<r\) 内解析。若 \(f\) 在该去心邻域内有界，则 \(z_0\) 是可去奇点（即 \(f\) 可解析延拓到 \(z_0\)）。
+\end{theorem}
+
+\begin{proof}
+取小圆 \(C\) 以 \(z_0\) 为中心，半径为 \(\rho<r\)。对任意 \(z\neq z_0\) 且 \(|z-z_0|<\rho\)，考虑钥匙孔围道（如图 4 所示）同时避开 \(z\) 和 \(z_0\)。设两侧缝隙趋于零，并在钥匙孔围道上应用 Cauchy 定理，得到
+\[
+\int_C \frac{f(\zeta)}{\zeta-z}\,d\zeta + \int_{\gamma_\epsilon} \frac{f(\zeta)}{\zeta-z}\,d\zeta + \int_{\gamma_\epsilon'} \frac{f(\zeta)}{\zeta-z}\,d\zeta = 0,
+\]
+其中 \(\gamma_\epsilon\) 是绕 \(z\) 的小圆（负向），\(\gamma_\epsilon'\) 是绕 \(z_0\) 的小圆（负向）。由 Cauchy 积分公式，
+\[
+\int_{\gamma_\epsilon} \frac{f(\zeta)}{\zeta-z}\,d\zeta = -2\pi i f(z).
+\]
+由于 \(f\) 有界，且 \(\zeta\) 在 \(\gamma_\epsilon'\) 上保持远离 \(z\)，有
+\[
+\left|\int_{\gamma_\epsilon'} \frac{f(\zeta)}{\zeta-z}\,d\zeta\right| \le C\epsilon \to 0 \quad (\epsilon\to0).
+\]
+令 \(\epsilon\to0\) 得
+\[
+f(z) = \frac{1}{2\pi i}\int_C \frac{f(\zeta)}{\zeta-z}\,d\zeta.
+\]
+右端定义了一个在 \(|z-z_0|<\rho\) 上全纯的函数，且在 \(z\neq z_0\) 时等于 \(f(z)\)。因此 \(f\) 可解析延拓到 \(z_0\)。
+\end{proof}
+
+\begin{corollary}
+若 \(f\) 在去心邻域内解析且 \(\lim_{z\to z_0}(z-z_0)f(z)=0\)，则 \(z_0\) 是可去奇点。
+\end{corollary}
+
+\section{极点与函数趋于无穷的等价性}
+\begin{theorem}\label{thm:pole}
+设 \(z_0\) 是 \(f\) 的孤立奇点。则 \(z_0\) 是极点当且仅当 \(\lim_{z\to z_0}|f(z)| = \infty\)。
+\end{theorem}
+
+\begin{proof}
+\textbf{必要性：} 若 \(z_0\) 是 \(n\) 阶极点，则存在 \(h(z)\) 在 \(z_0\) 处解析且 \(h(z_0)\neq0\)，使得 \(f(z)=(z-z_0)^{-n}h(z)\)。于是 \(|f(z)|\to\infty\) 当 \(z\to z_0\)。
+
+\textbf{充分性：} 若 \(|f(z)|\to\infty\)，则 \(1/f(z)\) 在去心邻域内解析且趋于 \(0\)。由 Riemann 可去奇点定理，\(1/f(z)\) 可解析延拓到 \(z_0\)，且延拓后的值 \(g(z_0)=0\)。因此 \(g\) 在 \(z_0\) 处有零点，设为 \(m\) 阶，即 \(g(z)=(z-z_0)^m h(z)\)，\(h(z_0)\neq0\)。于是
+\[
+f(z) = \frac{1}{g(z)} = (z-z_0)^{-m} \cdot \frac{1}{h(z)},
+\]
+故 \(z_0\) 是 \(m\) 阶极点。
+\end{proof}
+
+\section{本质奇点与 Casorati–Weierstrass 定理}
+\begin{theorem}[Casorati–Weierstrass]
+若 \(z_0\) 是 \(f\) 的本质奇点，
+则 \(f\) 在 \(z_0\) 的任何去心邻域内的像在 \(\CC\) 中稠密。
+即：对任意 \(w\in\CC\) ,任意\(\delta>0\)和任意 \(\epsilon>0\)，存在 \(z\) 满足 \(0<|z-z_0|<\delta\) 使得 \(|f(z)-w|<\epsilon\)。
+\end{theorem}
+
+\begin{proof}
+用反证法。假设存在 \(w\in\CC\) 和 \(\delta>0\) 使得对所有 \(0<|z-z_0|<\delta\) 有 \(|f(z)-w|>\epsilon\)。定义
+\[
+g(z) = \frac{1}{f(z)-w},
+\]
+则 \(g\) 在去心邻域内解析且有界（\(|g|\le 1/\delta\)）。由 Riemann 可去奇点定理，\(g\) 可解析延拓到 \(z_0\)。
+\begin{itemize}
+\item 若 \(g(z_0)\neq0\)，则 \(f(z)=w+1/g(z)\) 在 \(z_0\) 解析，矛盾。
+\item 若 \(g(z_0)=0\)，则 \(f(z)=w+1/g(z)\) 在 \(z_0\) 有极点（因为 \(1/g\) 有极点），也与本质奇点矛盾。
+\end{itemize}
+因此假设错误，像集必稠密。
+\end{proof}
+
+\begin{remark}
+该定理表明本质奇点附近函数行为极其“混乱”。更深刻的 Picard 大定理断言：本质奇点处 \(f\) 取每个复数值无穷多次，至多一个例外。
+\end{remark}
+
+\section{亚纯函数}
+\begin{definition}
+设 \(\Omega\subset\CC\) 为开集。\(f\) 在 \(\Omega\) 上\textbf{亚纯}是指存在一个无极限点的点集 \(\{z_0,z_1,\dots\}\subset\Omega\)，使得：
+\begin{itemize}
+\item \(f\) 在 \(\Omega\setminus\{z_0,z_1,\dots\}\) 上解析；
+\item 每个 \(z_j\) 都是 \(f\) 的极点。
+\end{itemize}
+换句话说，亚纯函数是“只有极点作为奇点”的解析函数。
+\end{definition}
+
+\section{扩展复平面上的亚纯函数与有理函数}
+
+
+
+在复分析中，为了统一处理函数在“无限远”处的性态，我们引入\textbf{扩充复平面}（也称\textbf{Riemann 球面}）。
+
+\begin{definition}[扩充复平面]
+设 $\CC$ 为复平面，定义
+\[
+\widehat{\CC} = \CC \cup \{\infty\},
+\]
+其中 $\infty$ 是一个理想点，称为\textbf{无穷远点}。通过球极投影，$\widehat{\CC}$ 与单位球面 $\mathbb{S}^2$ 一一对应，此时 $\infty$ 对应球的北极。
+\end{definition}
+
+\begin{remark}
+在 $\widehat{\CC}$ 上，我们可以像处理普通点一样讨论函数在 $\infty$ 附近的行为。基本方法是作变量代换 $w = 1/z$，将 $\infty$ 邻域映射到 $0$ 的去心邻域。
+\end{remark}
+
+\section{无穷远点的邻域与奇点分类}
+
+\begin{definition}[无穷远点的邻域]
+对于任意 $R > 0$，集合
+\[
+\{z \in \CC : |z| > R\} \cup \{\infty\}
+\]
+称为 $\infty$ 的一个\textbf{邻域}。这等价于说，在 $w = 1/z$ 变换下，$w=0$ 的一个去心邻域 $0 < |w| < 1/R$ 对应 $z = \infty$ 的去心邻域。
+\end{definition}
+
+设函数 $f$ 在 $\infty$ 的某个去心邻域内有定义（即存在 $R>0$ 使得 $f$ 在 $|z|>R$ 上解析）。定义辅助函数
+\[
+g(w) = f\!\left(\frac{1}{w}\right), \qquad 0 < |w| < \frac{1}{R}.
+\]
+则 $f$ 在 $\infty$ 处的性质完全由 $g$ 在 $w=0$ 处的性质决定。
+
+\begin{definition}[无穷远点为可去奇点 / 全纯]
+若 $g(w)$ 在 $w=0$ 处有可去奇点（即 $g$ 在 $0$ 的某邻域内有界），则称 $f$ 在 $\infty$ 处\textbf{全纯}（或解析）。此时可定义
+\[
+f(\infty) = g(0) = \lim_{w\to 0} g(w),
+\]
+使得 $f$ 在 $\infty$ 处解析。
+\end{definition}
+
+\begin{definition}[无穷远点为极点]
+若 $g(w)$ 在 $w=0$ 处有极点（即 $g(w) \to \infty$ 当 $w\to 0$），则称 $f$ 在 $\infty$ 处有\textbf{极点}。若 $g$ 在 $0$ 处有 $m$ 阶极点，则称 $f$ 在 $\infty$ 处有 $m$ 阶极点。
+\end{definition}
+
+\begin{definition}[无穷远点为本性奇点]
+若 $g(w)$ 在 $w=0$ 处有本性奇点，则称 $f$ 在 $\infty$ 处有\textbf{本性奇点}。
+\end{definition}
+
+
+\begin{itemize}
+\item $f(z) = \dfrac{1}{z}$：此时 $g(w)=w$，在 $0$ 处解析，故 $f$ 在 $\infty$ 处全纯，且 $f(\infty)=0$。
+\item $f(z)=z^n$（$n>0$）：$g(w)=1/w^n$，在 $0$ 处有 $n$ 阶极点，故 $f$ 在 $\infty$ 处有 $n$ 阶极点。
+\item $f(z)=e^z$：$g(w)=e^{1/w}$，$0$ 是本性奇点，故 $f$ 在 $\infty$ 处有本性奇点。
+\end{itemize}
+
+
+\section{扩充复平面上的亚纯函数}
+
+\begin{definition}[$\widehat{\CC}$ 上的亚纯函数]
+设 $f$ 是定义在 $\widehat{\CC}$ 上的函数（取值于 $\CC \cup \{\infty\}$）。称 $f$ 在 $\widehat{\CC}$ 上\textbf{亚纯}，如果
+\begin{itemize}
+\item $f$ 在 $\CC$ 上亚纯（即 $f$ 在 $\CC$ 上的奇点只有极点）；
+\item $f$ 在 $\infty$ 处或者全纯，或者有极点（即 $\infty$ 不是本性奇点）。
+\end{itemize}
+换言之，$f$ 在整个 Riemann 球面上的奇点（包括 $\infty$）全部是极点。
+\end{definition}
+
+\begin{remark}
+由于 $\widehat{\CC}$ 是紧致的，任何亚纯函数在 $\widehat{\CC}$ 上只能有有限多个极点（否则极点的极限点会是本性奇点）。
+\end{remark}
+
+
+\section{定理3.4的陈述}
+
+\begin{theorem}[有理函数刻画]
+设 $f$ 在扩充复平面 $\widehat{\CC} = \CC \cup \{\infty\}$ 上亚纯（即 $f$ 在 $\CC$ 上只有极点，且在 $\infty$ 处要么解析要么有极点），则 $f$ 必为有理函数。换言之，存在多项式 $P(z), Q(z)$（$Q\not\equiv 0$）使得
+\[
+f(z) = \frac{P(z)}{Q(z)},\qquad z\in\CC\setminus\{Q=0\},
+\]
+且在 $\infty$ 处，$f$ 的性态由 $\deg P$ 与 $\deg Q$ 的大小关系决定。
+\end{theorem}
+
+\section{证明}
+
+\subsection{准备工作}
+
+由于 $\widehat{\CC}$ 是紧致的（Riemann 球面），$f$ 的极点（包括 $\infty$ 在内）只能有有限个。否则，无限个极点会在 $\widehat{\CC}$ 中产生聚点，而聚点必为本性奇点，这与 $f$ 亚纯矛盾。
+
+设 $f$ 在 $\CC$ 上的有限极点为 $z_1, z_2, \dots, z_n$（允许重复，表示阶数）。在 $\infty$ 处，$f$ 可能解析也可能有极点，记 $m_\infty \ge 0$ 为 $\infty$ 处极点的阶数（$m_\infty = 0$ 表示解析）。
+
+\subsection{有限极点处的主部}
+
+对每个有限极点 $z_k$，设其阶数为 $m_k \ge 1$。在 $z_k$ 的某个去心邻域内，$f$ 有 Laurent 展开：
+\[
+f(z) = \frac{a_{-m_k}^{(k)}}{(z-z_k)^{m_k}} + \frac{a_{-m_k+1}^{(k)}}{(z-z_k)^{m_k-1}} + \dots + \frac{a_{-1}^{(k)}}{z-z_k} + \text{（解析部分）}.
+\]
+定义 \textbf{主部}（奇异部分）：
+\[
+P_k(z) = \frac{a_{-m_k}^{(k)}}{(z-z_k)^{m_k}} + \frac{a_{-m_k+1}^{(k)}}{(z-z_k)^{m_k-1}} + \dots + \frac{a_{-1}^{(k)}}{z-z_k}.
+\]
+显然 $P_k(z)$ 是有理函数，在 $\CC$ 上除了 $z_k$ 外解析，且 $f(z) - P_k(z)$ 在 $z_k$ 处解析。
+
+\subsection{无穷远点处的主部}
+
+作变换 $w = 1/z$，并令
+\[
+g(w) = f(1/w).
+\]
+$g$ 在 $w=0$ 的某去心邻域内解析。由亚纯假设，$w=0$ 要么是可去奇点（对应 $f$ 在 $\infty$ 解析），要么是极点。设 $m_\infty \ge 0$ 为 $g$ 在 $w=0$ 处极点的阶数（$m_\infty = 0$ 表示可去奇点）。在 $w=0$ 附近，$g$ 有 Laurent 展开：
+\[
+g(w) = \frac{b_{-m_\infty}}{w^{m_\infty}} + \frac{b_{-m_\infty+1}}{w^{m_\infty-1}} + \dots + \frac{b_{-1}}{w} + \text{（解析部分）},
+\]
+其中当 $m_\infty = 0$ 时右边只有解析部分（即 $g$ 在 $0$ 解析）。
+
+代回 $z = 1/w$，得到 $f(z)$ 在 $\infty$ 附近（即 $|z|$ 很大时）的展开：
+\[
+f(z) = b_{-m_\infty} z^{m_\infty} + b_{-m_\infty+1} z^{m_\infty-1} + \dots + b_{-1} z + \text{（解析部分趋向常数）}.
+\]
+定义 \textbf{无穷远点的主部} 为多项式（若 $m_\infty > 0$）或零（若 $m_\infty = 0$）：
+\[
+P_\infty(z) = b_{-m_\infty} z^{m_\infty} + b_{-m_\infty+1} z^{m_\infty-1} + \dots + b_{-1} z.
+\]
+注意：当 $m_\infty = 0$ 时 $P_\infty(z) \equiv 0$。
+
+\subsection{构造辅助函数}
+
+令
+\[
+H(z) = f(z) - P_\infty(z) - \sum_{k=1}^{n} P_k(z).
+\]
+我们断言 $H(z)$ 在 $\widehat{\CC}$ 上全纯（即处处解析）。
+
+\begin{itemize}
+\item 在 $\CC$ 上，$H$ 的奇点只可能出现在原极点 $z_1,\dots,z_n$ 以及 $\infty$ 处。
+\item 对每个有限极点 $z_k$，$f(z)-P_k(z)$ 在 $z_k$ 处解析，而减去 $P_\infty$ 及其他 $P_j\ (j\ne k)$ 不会影响 $z_k$ 处的解析性（因为它们在 $z_k$ 处解析），故 $H$ 在 $z_k$ 处解析。
+\item 在 $\infty$ 处，考虑 $w = 1/z$，则
+\[
+H(1/w) = f(1/w) - P_\infty(1/w) - \sum_{k=1}^{n} P_k(1/w).
+\]
+我们知道 $f(1/w)$ 在 $w=0$ 处的主部已被 $P_\infty(1/w)$ 完全消去（因为 $P_\infty(1/w)$ 正是 $g(w)$ 的负幂部分）。此外，每个 $P_k(1/w)$ 在 $w=0$ 处解析（因为 $1/w \to \infty$ 时 $P_k(1/w)$ 趋于零或常数，且 $P_k$ 是仅含负幂项的有理函数）。因此 $H(1/w)$ 在 $w=0$ 处解析，即 $H$ 在 $\infty$ 处解析。
+\end{itemize}
+
+综上，$H$ 在整个 Riemann 球面 $\widehat{\CC}$ 上全纯。
+
+\subsection{应用 Liouville 定理}
+
+由于 $\widehat{\CC}$ 紧致，$\widehat{\CC}$ 上的全纯函数必为常数（这是 Liouville 定理在球面上的推广：球面上的全纯函数有界，因此常值）。故存在常数 $C \in \CC$ 使得
+\[
+H(z) \equiv C,\qquad \forall z \in \widehat{\CC}.
+\]
+
+\begin{remark}
+   $H$ 的有界性是通过 $H(1/\omega)$ 在 $0$ 的去心领域
+   中有界，从而$H$在$\infty$处取得可去奇点，
+   且$H$在$\left\lvert z\right\rvert > R $上有界；
+   并且由$H$全纯可知在$\left\lvert z\right\rvert \le R $的有界性，
+   故$H$在$\widehat{\CC}$上面是有界的。
+
+\end{remark}
+
+\begin{remark}
+   或者直接由$H$全纯，以及$\widehat{\CC}$是紧的，得到有界性。
+\end{remark}
+
+\subsection{得到 $f$ 的表达式}
+
+于是
+\[
+f(z) = C + P_\infty(z) + \sum_{k=1}^{n} P_k(z).
+\]
+
+其中：
+\begin{itemize}
+\item $P_k(z)$ 是形如 $\displaystyle \sum_{j=1}^{m_k} \frac{c_{j}}{(z-z_k)^j}$ 的有理函数（部分分式）；
+\item $P_\infty(z)$ 是一个多项式（可能为零）；
+\item $C$ 是常数。
+\end{itemize}
+
+有限个这样的项之和显然是有理函数（分子分母均为多项式）。因此 $f$ 是有理函数。
+
+\subsection{补充说明}
+
+\begin{itemize}
+\item 若 $f$ 在 $\infty$ 解析（即 $m_\infty = 0$），则 $P_\infty \equiv 0$，且 $f(\infty) = C + \sum P_k(\infty)$，而每个 $P_k(\infty)=0$，故 $f(\infty)=C$。
+\item 若 $f$ 在 $\infty$ 有极点，则多项式 $P_\infty$ 的次数即为该极点的阶数。
+\item 该定理的逆命题显然成立：任何有理函数在 $\widehat{\CC}$ 上亚纯（只有极点，包括可能的无穷远极点）。
+\end{itemize}
+
+
+定理3.4的证明至此结束。该定理深刻揭示了：扩充复平面上的亚纯函数与有理函数是一一对应的，这是复分析中局部与整体性质统一的重要体现。
+
+
+
+\begin{corollary}
+$\widehat{\CC}$ 上的非常数亚纯函数至少有一个极点（在有限点或 $\infty$ 处）。
+\end{corollary}
+
+
+\begin{corollary}
+有理函数由它的零点、极点（包括无穷远点）及其阶数唯一确定（相差一个非零常数因子）。
+\end{corollary}
+
+\section{Riemann 球面}
+\begin{definition}
+将 \(\CC\) 与球面 \(\mathbb{S}^2\) 通过\textbf{球极投影}等同，加上无穷远点 \(\infty\) 对应北极。得到的空间称为 \textbf{Riemann 球面} \(\widehat{\CC}\)。
+\end{definition}
+
+Riemann 球面是一个紧致黎曼面，具有球面拓扑。在 Riemann 球面上，极点不再特殊（对应到北极），亚纯函数成为球面到球面的全纯映射。定理 3.4 说明：球面上的全纯自映射（亚纯函数）必为有理函数。
+
+\section{逻辑脉络总结}
+本节沿着以下思路展开：
+\begin{enumerate}
+\item \textbf{分类孤立奇点} → 可去、极点、本质。
+\item \textbf{可去奇点的判定}：有界 → 可去（Riemann 定理）。证明核心：钥匙孔围道 + Cauchy 积分公式，将 \(f\) 表示成积分，从而解析延拓。
+\item \textbf{极点的等价条件}：函数值趋于无穷。证明利用 \(1/f\) 有界且趋于 0，由可去奇点定理推出 \(1/f\) 有零点，从而 \(f\) 有极点。
+\item \textbf{本质奇点的特征}：像集稠密（Casorati–Weierstrass）。证明利用反证法和可去奇点定理。
+\item \textbf{亚纯函数}：只有极点作为奇点的函数。
+\item \textbf{扩展复平面上的亚纯函数} → 有理函数。证明通过减去所有主部（有限和无穷远）得到全纯函数，由 Liouville 定理推出常数。
+\item \textbf{Riemann 球面}：提供一个紧致化视角，统一处理无穷远点。
+\end{enumerate}
+
+整个第 3.3 节是后续章节（如留数计算、幅角原理、整函数理论）的基础。特别是极点的局部展开（主部）为下一节的留数公式提供了直接工具。
+
+\end{document}

@@ -1,0 +1,109 @@
+\documentclass[UTF8]{ctexart} 
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：3.4节“幅角原理及其应用”}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+在复分析中，一个自然的问题是如何计算一个解析函数在给定区域内零点的个数（计重数），以及极点个数（计阶数）。Cauchy 留数定理为我们提供了一种有力的工具：若我们能找到某个函数的积分，其留数恰好反映零点和极点的信息，那么问题便转化为计算围道积分。观察到若 $f$ 在 $z_0$ 处有 $n$ 阶零点，则 $f(z)=(z-z_0)^n g(z)$，$g(z_0)\neq0$，从而
+\[
+\frac{f'(z)}{f(z)} = \frac{n}{z-z_0} + \frac{g'(z)}{g(z)},
+\]
+即 $f'/f$ 在零点处有一阶极点，留数为 $n$。类似地，若 $z_0$ 是 $m$ 阶极点，则 $f'/f$ 的留数为 $-m$。因此，函数 $f'/f$（称为 $f$ 的\textbf{对数导数}）的围道积分将直接给出内部零点与极点的代数和。这一思想正是\textbf{幅角原理}的核心。
+
+\section{对数导数与幅角原理}
+
+\begin{definition}[对数导数]
+设 $f$ 在区域 $\Omega$ 内亚纯，且 $f$ 不恒为零。则函数
+\[
+\frac{f'(z)}{f(z)}
+\]
+称为 $f$ 的\textbf{对数导数}。其名称来源于 $( \log f(z) )' = f'(z)/f(z)$，但 $\log f$ 可能是多值的，而 $f'/f$ 是单值解析函数（除去 $f$ 的零点和极点）。
+\end{definition}
+
+\begin{theorem}[幅角原理]
+设 $f$ 在开集 $\Omega$ 内亚纯，$\gamma$ 是 $\Omega$ 内一条可求长的简单闭曲线，其内部 $\operatorname{Int}(\gamma)$ 完全包含在 $\Omega$ 中。假设 $f$ 在 $\gamma$ 上既无零点也无极点。则
+\[
+\frac{1}{2\pi i}\oint_{\gamma} \frac{f'(z)}{f(z)}\,dz = N - P,
+\]
+其中 $N$ 是 $f$ 在 $\gamma$ 内部零点的个数（计重数），$P$ 是 $f$ 在 $\gamma$ 内部极点的个数（计阶数）。
+\end{theorem}
+
+\begin{proof}
+由留数定理（Corollary 2.3, Chapter 3），左边等于 $\gamma$ 内部所有奇点的留数之和。$f'/f$ 的奇点恰好是 $f$ 的零点和极点。若 $z_0$ 是 $f$ 的 $n$ 阶零点，则在 $z_0$ 附近 $f(z)=(z-z_0)^n g(z)$，$g$ 解析且 $g(z_0)\neq0$。于是
+\[
+\frac{f'(z)}{f(z)} = \frac{n}{z-z_0} + \frac{g'(z)}{g(z)},
+\]
+右边第二项在 $z_0$ 解析，故 $\operatorname{Res}_{z_0}(f'/f)=n$。若 $z_0$ 是 $f$ 的 $m$ 阶极点，则 $f(z)=(z-z_0)^{-m}h(z)$，$h$ 解析且 $h(z_0)\neq0$，类似可得 $\operatorname{Res}_{z_0}(f'/f)=-m$。因此所有奇点的留数和为 $N-P$，定理得证。
+\end{proof}
+
+\begin{remark}[几何解释]
+注意到 $\frac{f'(z)}{f(z)}dz = d(\log f(z)) = d(\ln|f(z)| + i\arg f(z))$。由于 $|f(z)|$ 是单值的，沿闭曲线 $\gamma$ 积分后其实部变化为零，而虚部给出 $\arg f(z)$ 的变化量。因此
+\[
+\frac{1}{2\pi i}\oint_{\gamma} \frac{f'(z)}{f(z)}\,dz = \frac{1}{2\pi} \Delta_{\gamma} \arg f(z).
+\]
+即积分值等于当 $z$ 沿 $\gamma$ 绕行一周时，$f(z)$ 的辐角改变量除以 $2\pi$，也就是 $f(\gamma)$ 绕原点的圈数（ winding number）。幅角原理断言：这个圈数恰好等于内部零点数减去极点数。
+\end{remark}
+
+\section{Rouché 定理}
+
+幅角原理的一个直接而有力的推论是 Rouché 定理，它给出了判断两个函数在区域内零点个数相等的简单条件。
+
+\begin{theorem}[Rouché 定理]
+设 $f$ 和 $g$ 在区域 $\Omega$ 内解析，$\gamma$ 是 $\Omega$ 内一条可求长的简单闭曲线，其内部 $\operatorname{Int}(\gamma) \subset \Omega$。若在 $\gamma$ 上
+\[
+|f(z)| > |g(z)|,
+\]
+则 $f$ 与 $f+g$ 在 $\gamma$ 内部有相同个数的零点（计重数）。
+\end{theorem}
+
+\subsection{证明思路}
+
+Rouché 定理的核心思想是：当我们在 $f$ 上添加一个在边界上“足够小”的扰动 $g$ 时，$f+g$ 的零点个数不会改变。这可以通过考虑函数族 $F_t(z)=f(z)+t g(z)$，$t\in[0,1]$ 来实现。条件 $|f|>|g|$ 保证了 $F_t$ 在 $\gamma$ 上无零点，因此 $F_t$ 的辐角沿 $\gamma$ 连续变化，其绕原点的圈数 $N(t)$ 是 $t$ 的连续整数函数，从而为常数。于是 $N(0)=N(1)$，即 $f$ 与 $f+g$ 有相同的零点个数。
+
+\subsection{详细证明}
+
+\begin{proof}
+对于 $t\in[0,1]$，定义 $F_t(z)=f(z)+t g(z)$。在 $\gamma$ 上，由假设 $|f(z)| > |g(z)| \ge |t g(z)|$，故 $|F_t(z)| \ge |f(z)| - |t g(z)| > 0$，因此 $F_t$ 在 $\gamma$ 上无零点。令
+\[
+N(t) = \frac{1}{2\pi i}\oint_{\gamma} \frac{F_t'(z)}{F_t(z)}\,dz.
+\]
+由幅角原理，$N(t)$ 是整数，等于 $F_t$ 在 $\gamma$ 内部零点的个数（因为 $F_t$ 解析，无极点）。被积函数关于 $(z,t)$ 连续，且 $F_t(z)$ 在 $\gamma$ 上一致远离零，故 $N(t)$ 是 $t$ 的连续函数。连续整数函数必为常数，所以 $N(0)=N(1)$，即 $f$ 与 $f+g$ 在 $\gamma$ 内部零点个数相同。
+\end{proof}
+
+\begin{remark}
+Rouché 定理常被用来估计多项式根的分布。例如，对于多项式 $P(z)=a_n z^n + \cdots + a_0$，取 $f(z)=a_n z^n$，$g(z)=a_{n-1}z^{n-1}+\cdots+a_0$，若在某个大圆 $|z|=R$ 上 $|a_n|R^n > |a_{n-1}|R^{n-1}+\cdots+|a_0|$，则 $P$ 在该圆内有 $n$ 个根（计重数），这正是代数学基本定理的另一种证明。
+\end{remark}
+
+\subsection{思想来源}
+
+Rouché 定理的思想可追溯到 Cauchy 的幅角原理以及“扰动不改变指标”的直观。Eugène Rouché 在 1862 年给出了这一定理。它本质上是幅角原理的一个同伦版本：函数族 $F_t$ 给出了从 $f$ 到 $f+g$ 的一个连续形变，只要在形变过程中 $F_t(\gamma)$ 始终不穿过原点，那么 $F_t$ 绕原点的圈数就保持不变。
+
+\section{应用举例}
+
+\subsection{例1：多项式根的位置}
+判断 $P(z)=z^5+3z+1$ 在单位圆 $|z|=1$ 内根的个数。取 $f(z)=3z$，$g(z)=z^5+1$。在 $|z|=1$ 上，$|f(z)|=3$，$|g(z)|\le |z|^5+1=2$，故 $|f|>|g|$。$f$ 在单位圆内只有一个零点 $z=0$，因此 $P$ 在单位圆内恰有一个根。
+
+\subsection{例2：辐角原理求零点个数}
+设 $f(z)=z^4+2z^2+1$，在圆 $|z|=2$ 上，$|f(z)-z^4| = |2z^2+1| \le 2\cdot 4+1=9$，而 $|z^4|=16$，故 $|f|>|f-z^4|$ 不成立（因为 $9<16$），不能直接用 Rouché。但我们可以直接计算 $f(z)=(z^2+1)^2$，有四个重根 $z=\pm i$。验证幅角原理：沿 $|z|=2$ 计算 $f'/f$ 的积分，结果应为 $4$，与零点个数一致。
+
+
+\end{document}
