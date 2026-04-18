@@ -1,0 +1,126 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：3.7节 傅里叶级数与调和函数}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}{例}[section]
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{section}{3}
+\setcounter{subsection}{6}
+\subsection{傅里叶级数与调和函数}
+
+在第4章中，我们将详细探讨复变函数论与实直线上傅里叶分析之间的若干深刻联系。本节先建立一个简单而直接的关系：圆盘上全纯函数的幂级数展开与其在圆周上的傅里叶级数展开之间的对应。这一联系不仅揭示了全纯函数在圆周上的特殊性质，也为研究调和函数提供了有力工具。
+
+\subsubsection{幂级数与傅里叶系数}
+
+设 $f$ 在圆盘 $D_R(z_0)$ 内全纯，则 $f$ 有幂级数展开
+\[
+f(z) = \sum_{n=0}^\infty a_n (z-z_0)^n ,
+\]
+该级数在圆盘内收敛。下面的定理表明，幂级数的系数恰好对应于 $f$ 在圆周 $|z-z_0|=r$ 上的傅里叶系数（的正频率部分）。
+
+\begin{theorem}[幂级数系数的傅里叶表示]
+设 $f$ 在 $D_R(z_0)$ 内全纯。则对于所有 $n\ge 0$ 和任意 $0<r<R$，有
+\[
+a_n = \frac{1}{2\pi r^n} \int_0^{2\pi} f(z_0 + re^{i\theta}) e^{-in\theta}\,d\theta .
+\]
+此外，当 $n<0$ 时，
+\[
+0 = \frac{1}{2\pi r^n} \int_0^{2\pi} f(z_0 + re^{i\theta}) e^{-in\theta}\,d\theta .
+\]
+\end{theorem}
+
+\begin{proof}[证明思路]
+利用柯西积分公式表示高阶导数 $f^{(n)}(z_0)$，这直接给出了 $a_n = f^{(n)}(z_0)/n!$。然后将积分公式中的围道取为以 $z_0$ 为中心、半径为 $r$ 的圆周，通过参数化 $z = z_0 + re^{i\theta}$ 将复积分转化为实参数积分，即得傅里叶系数的形式。对于 $n<0$ 的情形，被积函数在圆盘内全纯，由柯西定理积分为零。
+\end{proof}
+
+\begin{proof}[详细证明]
+由幂级数理论，$a_n = f^{(n)}(z_0)/n!$。根据第2章的柯西积分公式（定理4.1及其推论4.2），对任意 $0<r<R$，有
+\[
+f^{(n)}(z_0) = \frac{n!}{2\pi i} \int_{C_r} \frac{f(\zeta)}{(\zeta-z_0)^{n+1}}\,d\zeta ,
+\]
+其中 $C_r$ 是以 $z_0$ 为中心、半径为 $r$ 的正向圆周。作参数化 $\zeta = z_0 + re^{i\theta}$，$\theta\in[0,2\pi]$，则 $d\zeta = ire^{i\theta}d\theta$，且 $\zeta - z_0 = re^{i\theta}$。代入得
+\[
+\begin{aligned}
+a_n &= \frac{f^{(n)}(z_0)}{n!} 
+= \frac{1}{2\pi i} \int_0^{2\pi} \frac{f(z_0 + re^{i\theta})}{(re^{i\theta})^{n+1}} ire^{i\theta}\,d\theta \\
+&= \frac{1}{2\pi r^n} \int_0^{2\pi} f(z_0 + re^{i\theta}) e^{-in\theta}\,d\theta .
+\end{aligned}
+\]
+这就证明了 $n\ge0$ 的情形。
+
+当 $n<0$ 时，令 $m = -n >0$，则上述积分为
+\[
+\frac{1}{2\pi r^{-m}} \int_0^{2\pi} f(z_0 + re^{i\theta}) e^{im\theta}\,d\theta 
+= \frac{r^m}{2\pi} \int_0^{2\pi} f(z_0 + re^{i\theta}) e^{im\theta}\,d\theta .
+\]
+另一方面，由柯西积分公式的推导过程可知，该积分等于
+\[
+\frac{r^m}{2\pi i} \int_{C_r} \frac{f(\zeta)}{(\zeta-z_0)^{-m+1}}\,d\zeta = \frac{1}{2\pi i} \int_{C_r} f(\zeta)(\zeta-z_0)^{m-1}\,d\zeta .
+\]
+因为 $m-1 \ge 0$，被积函数 $f(\zeta)(\zeta-z_0)^{m-1}$ 在圆盘内全纯，由柯西定理知该积分为零。这就完成了定理的证明。
+\end{proof}
+
+\subsubsection{定理的解释与意义}
+
+将 $f(z_0 + re^{i\theta})$ 视为定义在圆周上的函数，其傅里叶系数为
+\[
+c_n = \frac{1}{2\pi} \int_0^{2\pi} f(z_0 + re^{i\theta}) e^{-in\theta}\,d\theta .
+\]
+定理7.1表明：
+\begin{itemize}
+    \item 对于全纯函数在圆周上的限制，其\textbf{负指标的傅里叶系数全部为零}（$c_n = 0$ 当 $n<0$）。
+    \item 正指标的傅里叶系数恰好等于幂级数系数乘以 $r^n$（即 $c_n = a_n r^n$ 当 $n\ge0$）。
+\end{itemize}
+这一性质刻画了全纯函数在圆周上取值的特征：它的傅里叶展开仅包含非负频率分量。这不仅是全纯函数“刚性”的又一体现，也是复分析与傅里叶分析之间的一个优雅连接点。
+
+\subsubsection{均值性质与调和函数}
+
+取定理中的 $n=0$，得到 $a_0 = f(z_0)$，于是有
+\[
+f(z_0) = \frac{1}{2\pi} \int_0^{2\pi} f(z_0 + re^{i\theta})\,d\theta ,\quad 0<r<R .
+\]
+这就是\textbf{均值性质}：全纯函数在圆心处的值等于它在圆周上的平均值。
+
+若记 $u = \operatorname{Re}(f)$，对上述等式两边取实部，即得
+\[
+u(z_0) = \frac{1}{2\pi} \int_0^{2\pi} u(z_0 + re^{i\theta})\,d\theta .
+\]
+因此，全纯函数的实部也满足均值性质。事实上，可以证明（见第2章习题12）圆盘上的任何调和函数都是某个全纯函数的实部，故\textbf{所有调和函数都具有均值性质}。这一性质是调和函数理论的基础，也是复分析与位势理论之间的重要桥梁。
+
+\begin{corollary}[调和函数的均值性质]
+若 $u$ 是圆盘 $D_R(z_0)$ 内的调和函数，则对任意 $0<r<R$，有
+\[
+u(z_0) = \frac{1}{2\pi} \int_0^{2\pi} u(z_0 + re^{i\theta})\,d\theta .
+\]
+\end{corollary}
+
+\subsubsection{逻辑脉络总结}
+
+本节的内容短小精悍，却在复分析与傅里叶分析之间架起了一座桥梁：
+
+\begin{itemize}
+    \item \textbf{定理7.1} 将全纯函数的幂级数系数与圆周上的傅里叶系数联系起来，揭示了全纯函数在边界上的特殊频域特征：负频率分量为零。
+    \item 作为直接推论，得到\textbf{均值性质}，这是全纯函数和调和函数共有的基本性质。
+    \item 这一节的结果为第4章傅里叶变换在复分析中的应用（如Paley-Wiener定理）以及调和函数的深入研究（如泊松积分公式）做好了铺垫。
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,213 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：3.5节 同伦与单连通区域}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}{例}[section]
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{section}{3}
+\setcounter{subsection}{4}
+\subsection{同伦与单连通区域}
+
+柯西定理的一般形式以及对多值函数（如对数函数）的分析，其关键在于理解在怎样的区域内全纯函数存在原函数。这不仅是一个局部问题，更是一个整体问题。本节将引入\textbf{同伦}的概念，并由此定义\textbf{单连通}区域，从而为一般形式的柯西定理奠定拓扑基础。
+
+\subsubsection{曲线的同伦}
+
+设 $\gamma_0$ 和 $\gamma_1$ 是区域 $\Omega$ 中具有相同起点和终点的两条曲线。直观上，若能将其中一条曲线在 $\Omega$ 内连续地形变为另一条，而不离开 $\Omega$，则称这两条曲线是同伦的。
+
+\begin{definition}[同伦]
+设 $\gamma_0(t)$ 和 $\gamma_1(t)$ 是定义在 $[a,b]$ 上的两条参数化曲线，满足
+\[
+\gamma_0(a)=\gamma_1(a)=\alpha,\quad \gamma_0(b)=\gamma_1(b)=\beta .
+\]
+如果对每一个 $s\in[0,1]$，都存在一条曲线 $\gamma_s\subset\Omega$，参数化为 $\gamma_s(t)$（$t\in[a,b]$），满足：
+\begin{itemize}
+    \item 对每个 $s$，$\gamma_s(a)=\alpha$，$\gamma_s(b)=\beta$；
+    \item 对所有 $t\in[a,b]$，$\gamma_s(t)|_{s=0}=\gamma_0(t)$，$\gamma_s(t)|_{s=1}=\gamma_1(t)$；
+    \item $\gamma_s(t)$ 关于 $(s,t)\in[0,1]\times[a,b]$ 是二元连续的，
+\end{itemize}
+则称 $\gamma_0$ 与 $\gamma_1$ 在 $\Omega$ 中\textbf{同伦}。这一族曲线 $\{\gamma_s\}$ 称为 $\gamma_0$ 到 $\gamma_1$ 的一个同伦。
+\end{definition}
+
+粗略地说，两条曲线同伦就是指其中一条可以在区域内部连续地形变为另一条，且形变过程中端点始终保持不动（图略）。
+
+\begin{theorem}[同伦不变性]
+设 $f$ 在 $\Omega$ 上全纯。若 $\gamma_0$ 与 $\gamma_1$ 是 $\Omega$ 中两条同伦的曲线，则
+\[
+\int_{\gamma_0} f(z)\,dz = \int_{\gamma_1} f(z)\,dz .
+\]
+\end{theorem}
+
+\begin{proof}[证明思路]
+证明的关键在于说明：如果两条曲线彼此充分接近且具有相同的端点，那么它们上面的积分相等。然后，将形变参数的区间 $[0,1]$ 分割为充分小的子区间，使得相邻的曲线 $\gamma_{s_j}$ 和 $\gamma_{s_{j+1}}$ 足够接近，从而它们的积分相等。经过有限步传递，即得 $\gamma_0$ 与 $\gamma_1$ 的积分相等。
+\end{proof}
+
+\begin{proof}[详细证明]
+\textbf{第1步：紧性与一致连续性。}
+由同伦定义，函数 $F(s,t)=\gamma_s(t)$ 在 $[0,1]\times[a,b]$ 上连续。其像集 $K$ 是 $\Omega$ 中的紧子集。由于 $\Omega$ 是开集，紧集 $K$ 到边界 $\partial\Omega$ 的距离为正数，故存在 $\varepsilon>0$，使得以 $K$ 中任意点为中心、$3\varepsilon$ 为半径的闭圆盘都完全包含在 $\Omega$ 内。若不然，可取出矛盾序列。
+
+由 $F$ 在紧集上的一致连续性，存在 $\delta>0$，使得当 $|s_1-s_2|<\delta$ 时，
+\[
+\sup_{t\in[a,b]} |\gamma_{s_1}(t)-\gamma_{s_2}(t)| < \varepsilon .
+\]
+
+\textbf{第2步：证明相邻曲线积分相等。}
+固定 $s_1,s_2$ 满足 $|s_1-s_2|<\delta$。我们在 $\gamma_{s_1}$ 和 $\gamma_{s_2}$ 上分别取分点
+\[
+z_0=\alpha,\,z_1,\dots,z_n,\,z_{n+1}=\beta \quad (\text{在 }\gamma_{s_1}\text{上}),
+\]
+\[
+w_0=\alpha,\,w_1,\dots,w_n,\,w_{n+1}=\beta \quad (\text{在 }\gamma_{s_2}\text{上}),
+\]
+使得对每个 $i=0,1,\dots,n$，点 $z_i,z_{i+1},w_i,w_{i+1}$ 都落在某个以 $\gamma_{s_1}$ 上的点为中心、半径为 $2\varepsilon$ 的圆盘 $D_i$ 内，且这些圆盘覆盖相应的曲线段。由于两条曲线距离小于 $\varepsilon$，这样的选取是可能的。
+
+每个 $D_i$ 包含在 $\Omega$ 内，且圆盘是单连通的（实际上圆盘是凸的），全纯函数 $f$ 在 $D_i$ 上有原函数 $F_i$，即 $F_i'=f$。
+
+在相邻圆盘 $D_i$ 与 $D_{i+1}$ 的交集上，$F_i$ 和 $F_{i+1}$ 都是 $f$ 的原函数，因此相差一个常数，记作 $c_i$。于是
+\[
+F_{i+1}(z_{i+1})-F_i(z_{i+1}) = c_i = F_{i+1}(w_{i+1})-F_i(w_{i+1}),
+\]
+从而
+\[
+F_{i+1}(z_{i+1})-F_{i+1}(w_{i+1}) = F_i(z_{i+1})-F_i(w_{i+1}).
+\]
+
+利用原函数计算曲线积分：
+\[
+\int_{\gamma_{s_1}} f = \sum_{i=0}^n \bigl[F_i(z_{i+1}) - F_i(z_i)\bigr],\quad
+\int_{\gamma_{s_2}} f = \sum_{i=0}^n \bigl[F_i(w_{i+1}) - F_i(w_i)\bigr].
+\]
+两式相减并重组：
+\[
+\begin{aligned}
+\int_{\gamma_{s_1}} f - \int_{\gamma_{s_2}} f 
+&= \sum_{i=0}^n \Bigl( \bigl[F_i(z_{i+1})-F_i(w_{i+1})\bigr] - \bigl[F_i(z_i)-F_i(w_i)\bigr] \Bigr).
+\end{aligned}
+\]
+利用上述相邻原函数的关系，中间项逐对相消，最后剩下首尾两项：
+\[
+\int_{\gamma_{s_1}} f - \int_{\gamma_{s_2}} f 
+= \bigl[F_n(z_{n+1})-F_n(w_{n+1})\bigr] - \bigl[F_0(z_0)-F_0(w_0)\bigr].
+\]
+因为 $z_{n+1}=w_{n+1}=\beta$ 且 $z_0=w_0=\alpha$，两项均为 $0$，故积分相等。
+
+\textbf{第3步：有限步传递。}
+将 $[0,1]$ 分割为 $m$ 个子区间 $[s_j,s_{j+1}]$，使得每个子区间长度小于 $\delta$。记对应的曲线为 $\gamma_{s_0}=\gamma_0,\gamma_{s_1},\dots,\gamma_{s_m}=\gamma_1$。由第2步，
+\[
+\int_{\gamma_0} f = \int_{\gamma_{s_1}} f = \cdots = \int_{\gamma_1} f .
+\]
+定理得证。
+\end{proof}
+
+\subsubsection{单连通区域}
+
+利用同伦的概念，我们可以精确地定义“没有洞”的区域。
+
+\begin{definition}
+一个区域 $\Omega\subset\CC$ 称为\textbf{单连通的}，如果 $\Omega$ 中任意两条具有相同端点的曲线都是同伦的。
+\end{definition}
+
+直观上，单连通区域中任何闭合曲线都可以在区域内部连续收缩为一个点，而不会被区域外的“洞”卡住。
+
+\begin{theorem}[单连通区域上的原函数]
+设 $\Omega$ 是单连通区域，$f$ 在 $\Omega$ 上全纯。则 $f$ 在 $\Omega$ 上存在原函数 $F$（即 $F'=f$）。
+\end{theorem}
+
+\begin{proof}
+固定一点 $z_0\in\Omega$。对任意 $z\in\Omega$，定义
+\[
+F(z) = \int_{\gamma} f(w)\,dw ,
+\]
+其中 $\gamma$ 是 $\Omega$ 中连接 $z_0$ 与 $z$ 的任意曲线。由单连通性，任意两条这样的曲线都同伦，根据定理5.1，积分值与路径的选取无关，故 $F(z)$ 是良定义的。
+
+现在验证 $F'(z)=f(z)$。取 $h$ 充分小，使得连接 $z$ 与 $z+h$ 的线段 $\eta$ 完全落在 $\Omega$ 内，则
+\[
+F(z+h)-F(z) = \int_{\eta} f(w)\,dw .
+\]
+将 $f(w)=f(z)+\psi(w)$ 代入，其中 $\psi(w)\to0$ 当 $w\to z$，可得
+\[
+\frac{F(z+h)-F(z)}{h} = f(z) + \frac{1}{h}\int_{\eta}\psi(w)\,dw \to f(z)\quad(h\to0).
+\]
+因此 $F'(z)=f(z)$，$F$ 即为所求原函数。
+\end{proof}
+
+作为直接推论，我们得到单连通区域上的柯西定理。
+
+\begin{corollary}[单连通区域的柯西定理]
+若 $\Omega$ 是单连通区域，$f$ 在 $\Omega$ 上全纯，$\gamma$ 是 $\Omega$ 中任意闭曲线，则
+\[
+\int_{\gamma} f(z)\,dz = 0 .
+\]
+\end{corollary}
+
+\begin{proof}
+由定理5.2，$f$ 有原函数。闭曲线上原函数的积分等于端点函数值之差，而起点与终点重合，故积分为 $0$。
+\end{proof}
+
+\subsubsection{单连通区域的例子}
+
+\begin{example}[圆盘（或任何凸集）]
+设 $D$ 是一个开圆盘（更一般地，任何凸开集）。对 $D$ 内两条具有相同端点的曲线 $\gamma_0$ 和 $\gamma_1$，定义
+\[
+\gamma_s(t) = (1-s)\gamma_0(t) + s\gamma_1(t),\quad s\in[0,1].
+\]
+由于 $D$ 是凸集，对每个 $s$ 和 $t$，点 $\gamma_s(t)$ 都落在连接 $\gamma_0(t)$ 与 $\gamma_1(t)$ 的线段上，因而属于 $D$。这直接给出了 $\gamma_0$ 到 $\gamma_1$ 的同伦。故任何凸开集（包括圆盘、矩形、半平面等）都是单连通的。
+\end{example}
+
+\begin{example}[裂缝平面]
+考虑沿负实轴切开的复平面 $\Omega=\CC\setminus(-\infty,0]$。设 $\gamma_0$ 和 $\gamma_1$ 是 $\Omega$ 中的两条曲线。将每条曲线写为极坐标形式 $\gamma_j(t)=r_j(t)e^{i\theta_j(t)}$，其中 $r_j(t)>0$ 且 $|\theta_j(t)|<\pi$。定义同伦
+\[
+\gamma_s(t) = r_s(t)e^{i\theta_s(t)},
+\]
+其中
+\[
+r_s(t) = (1-s)r_0(t) + s r_1(t),\quad \theta_s(t) = (1-s)\theta_0(t) + s\theta_1(t).
+\]
+由于 $|\theta_s(t)|<\pi$ 且 $r_s(t)>0$，每条中间曲线都完全落在 $\Omega$ 内。故裂缝平面是单连通的。这个结论对于任意从原点出发的射线割开的平面同样成立。
+\end{example}
+
+\begin{example}[去心平面非单连通]
+去心平面 $\CC\setminus\{0\}$ 不是单连通的。考虑以原点为中心的单位圆周 $\gamma$（正向），其参数化为 $\gamma(t)=e^{it}$，$t\in[0,2\pi]$。计算积分
+\[
+\int_{\gamma} \frac{1}{z}\,dz = \int_0^{2\pi} \frac{ie^{it}}{e^{it}}\,dt = 2\pi i \neq 0 .
+\]
+如果 $\CC\setminus\{0\}$ 是单连通的，根据推论5.3，该积分应为 $0$。这一矛盾说明去心平面不可能是单连通的。
+\end{example}
+
+\begin{example}[玩具围道内部]
+可以证明，任何“玩具围道”（toy contour，如三角形、矩形、钥匙孔形等）的内部都是单连通的。这需要将内部分割为若干个子区域并分别构造同伦，其基本思路与凸集类似。
+\end{example}
+
+\subsubsection{总结与逻辑脉络}
+
+本节的内容为复分析中“区域的拓扑决定解析性质”这一核心思想提供了坚实的基础：
+
+\begin{itemize}
+    \item \textbf{同伦}给出了曲线之间连续形变的严格数学描述。
+    \item \textbf{定理5.1} 表明全纯函数沿同伦曲线的积分不变，其证明巧妙地结合了紧性、一致连续性以及局部原函数的存在性。
+    \item \textbf{单连通区域} 定义为任意同端点曲线皆同伦的区域，这一定义直接导致全纯函数在其上存在全局原函数（定理5.2）。
+    \item 原函数的存在性又立刻推出\textbf{单连通区域的柯西定理}（推论5.3）：任何闭曲线上的积分为零。
+    \item 通过正例（圆盘、裂缝平面）和反例（去心平面）的对比，我们可以清晰地看到单连通性与“洞”的存在与否之间的等价关系。
+\end{itemize}
+
+这一定理体系不仅完美解释了为何在有些区域中原函数存在而在另一些区域中缺失，也为下一节复对数的严格构造以及后续留数定理的应用铺平了道路。
+
+\end{document}

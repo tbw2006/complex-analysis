@@ -1,0 +1,169 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：3.6节 复对数}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}{例}[section]
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{section}{3}
+\setcounter{subsection}{5}
+\subsection{复对数}
+
+在实分析中，对数函数是指数函数的反函数，它只在正实数上有定义，且是单值的。然而在复平面上，由于指数函数 $e^z$ 具有周期性 $e^{z+2\pi i}=e^z$，它的反函数——复对数——不可避免地会是“多值”的。为了得到一个单值全纯的函数，我们必须限制其定义域并选定一个“分支”。本节将利用前文关于单连通区域的结果，给出复对数的严格定义，并研究其基本性质。
+
+\subsubsection{定义与多值性}
+
+设 $z\neq0$ 是任一复数，将其写为极坐标形式 $z=re^{i\theta}$，其中 $r>0$，$\theta\in\RR$ 是 $z$ 的辐角。我们期望对数函数满足 $e^{\log z}=z$，因此自然希望定义
+\[
+\log z = \log r + i\theta .
+\]
+这里 $\log r$ 是通常的正实数的自然对数，它是完全确定的；但 $\theta$ 并不是唯一确定的：任何相差 $2\pi$ 整数倍的辐角都对应同一个 $z$。因此，$\log z$ 在复平面上不能作为一个单值连续函数来定义。
+
+然而，如果我们将 $z$ 限制在某个适当的区域内，并且要求 $\theta$ 随 $z$ 连续变化，就可以选出唯一的一个 $\theta$，从而得到该区域上的一个单值对数分支。典型的例子是沿着负实轴切开的裂缝平面 $\CC\setminus(-\infty,0]$，在其上可以取辐角在 $(-\pi,\pi)$ 内，从而得到\textbf{对数的主值分支}：
+\[
+\operatorname{Log} z = \log|z| + i\operatorname{Arg} z,\quad -\pi<\operatorname{Arg} z<\pi .
+\]
+这是全纯的，并且满足 $e^{\operatorname{Log} z}=z$。
+
+下面的定理表明，这种构造可以推广到任意不含原点的单连通区域。
+
+\begin{theorem}[单连通区域上的对数分支]
+设 $\Omega$ 是一个单连通区域，满足 $1\in\Omega$ 且 $0\notin\Omega$。则在 $\Omega$ 上存在一个全纯函数 $F(z)=\log_{\Omega}(z)$，满足：
+\begin{enumerate}
+    \item[(i)] $F$ 在 $\Omega$ 上全纯；
+    \item[(ii)] $e^{F(z)}=z$ 对一切 $z\in\Omega$ 成立；
+    \item[(iii)] 当 $r$ 是靠近 $1$ 的实数时，$F(r)=\log r$，其中 $\log r$ 是通常的实对数。
+\end{enumerate}
+换言之，每个分支 $\log_{\Omega}(z)$ 都是标准实对数在 $\Omega$ 上的全纯扩张。
+\end{theorem}
+
+\begin{proof}[证明思路]
+我们将把 $F$ 构造为函数 $1/z$ 的一个原函数。因为 $0\notin\Omega$，函数 $f(z)=1/z$ 在 $\Omega$ 上全纯；又因为 $\Omega$ 是单连通的，根据定理5.2，$f$ 在 $\Omega$ 上有原函数。选取合适的积分常数，即可使该原函数满足对数的所有要求。
+\end{proof}
+
+\begin{proof}[详细证明]
+由于 $0\notin\Omega$，函数 $f(z)=1/z$ 在 $\Omega$ 上全纯。由 $\Omega$ 的单连通性，$f$ 在 $\Omega$ 上有原函数。我们通过如下路径积分具体构造一个原函数：
+\[
+F(z) = \int_{\gamma} \frac{1}{w}\,dw ,
+\]
+其中 $\gamma$ 是 $\Omega$ 内连接 $1$ 与 $z$ 的任意一条曲线。因为 $\Omega$ 单连通，任意两条这样的曲线都同伦，由同伦不变性定理（定理5.1），该积分值与路径 $\gamma$ 的选取无关，故 $F(z)$ 是良定义的。
+
+对 $F$ 求导，如同定理2.1的证明，可得 $F'(z)=1/z$，所以 $F$ 在 $\Omega$ 上全纯，这就证明了 (i)。
+
+为证 (ii)，考虑函数 $G(z)=z e^{-F(z)}$。求导得
+\[
+G'(z) = e^{-F(z)} - z F'(z) e^{-F(z)} = e^{-F(z)}\bigl(1 - z\cdot\frac{1}{z}\bigr) = 0 .
+\]
+因为 $\Omega$ 是连通的，$G(z)$ 必为常数。取 $z=1$，此时路径 $\gamma$ 可取为 $1$ 到 $1$ 的平凡路径，故 $F(1)=0$，于是 $G(1)=1\cdot e^{0}=1$。从而 $G(z)\equiv1$，即 $z e^{-F(z)}=1$，这等价于 $e^{F(z)}=z$ 对所有 $z\in\Omega$ 成立。
+
+最后证 (iii)。若 $r$ 是实数且靠近 $1$，我们可以选择从 $1$ 到 $r$ 的路径为实轴上的线段 $[1,r]$（因 $\Omega$ 是开集且包含 $1$，故对足够接近 $1$ 的 $r$，该线段完全在 $\Omega$ 内）。此时
+\[
+F(r) = \int_{1}^{r} \frac{1}{x}\,dx = \log r ,
+\]
+这正是标准的实对数。这就完成了定理的证明。
+\end{proof}
+
+\begin{example}[主值分支的验证]
+取 $\Omega = \CC\setminus(-\infty,0]$。对 $z=re^{i\theta}$，$|\theta|<\pi$，可以构造一条从 $1$ 到 $z$ 的路径：先从 $1$ 沿实轴走到 $r$，再沿圆弧走到 $z$。计算该路径上的积分即得
+\[
+\log z = \int_1^r \frac{dx}{x} + \int_0^\theta \frac{i r e^{it}}{r e^{it}}\,dt = \log r + i\theta .
+\]
+这正是对数的主值分支。
+\end{example}
+
+\subsubsection{对数的性质与注意事项}
+
+在实分析中，对数满足 $\log(x_1x_2)=\log x_1+\log x_2$。但在复平面上，由于分支的选取，这一等式并不总是成立。
+
+\begin{example}[对数加法公式失效]
+取 $z_1=z_2=e^{2\pi i/3}$，使用主值分支，有 $\operatorname{Log} z_1 = \operatorname{Log} z_2 = \frac{2\pi i}{3}$；然而 $z_1z_2 = e^{4\pi i/3} = e^{-2\pi i/3}$，其主值为 $-\frac{2\pi i}{3}$，而 $\frac{2\pi i}{3}+\frac{2\pi i}{3} = \frac{4\pi i}{3} \neq -\frac{2\pi i}{3}$。因此，一般情况下
+\[
+\log(z_1z_2) \neq \log z_1 + \log z_2 .
+\]
+当然，如果我们允许等式两边相差 $2\pi i$ 的整数倍，那么它在“多值”意义下仍然成立。
+\end{example}
+
+另外，借助主值分支，我们可以写出 $\log(1+z)$ 在原点的泰勒展开。由于 $\frac{d}{dz}\log(1+z)=\frac{1}{1+z}$，且 $\log(1+0)=0$，逐项积分几何级数可得
+\[
+\log(1+z) = z - \frac{z^2}{2} + \frac{z^3}{3} - \cdots = -\sum_{n=1}^\infty \frac{(-1)^n z^n}{n},\quad |z|<1 .
+\]
+这个级数在单位圆盘内收敛，且定义了主值分支在 $|z|<1$ 内的一个解析表达式。
+
+\subsubsection{无处为零的全纯函数的对数}
+
+定理6.1的特殊情形（$\Omega$ 不含原点且单连通）实际上可以大幅推广：只要 $f$ 在单连通区域上全纯且\textbf{处处不为零}，我们就可以对它取“对数”。
+
+\begin{theorem}
+设 $f$ 是单连通区域 $\Omega$ 上的一个无处为零的全纯函数。则存在 $\Omega$ 上的全纯函数 $g$，使得
+\[
+f(z) = e^{g(z)}\quad (\forall z\in\Omega).
+\]
+我们可将 $g(z)$ 记为 $\log f(z)$，并称其为 $f$ 的一个对数分支。
+\end{theorem}
+
+\begin{proof}[证明思路]
+与定理6.1完全平行。考虑 $f'(z)/f(z)$，它在 $\Omega$ 上全纯，故有原函数。适当调整常数，该原函数就是我们要找的 $g$。
+\end{proof}
+
+\begin{proof}[详细证明]
+固定一点 $z_0\in\Omega$，并选取一个复数 $c_0$ 使得 $e^{c_0}=f(z_0)$（这总是可能的，因为 $f(z_0)\neq0$）。定义
+\[
+g(z) = \int_{\gamma} \frac{f'(w)}{f(w)}\,dw + c_0 ,
+\]
+其中 $\gamma$ 是 $\Omega$ 内连接 $z_0$ 与 $z$ 的任意路径。由单连通性，该积分与路径无关。显然 $g$ 全纯且
+\[
+g'(z) = \frac{f'(z)}{f(z)} .
+\]
+考虑 $h(z)=f(z)e^{-g(z)}$，求导得
+\[
+h'(z) = f'(z)e^{-g(z)} - f(z)g'(z)e^{-g(z)} = e^{-g(z)}\bigl(f'(z)-f(z)\frac{f'(z)}{f(z)}\bigr)=0 .
+\]
+故 $h(z)$ 为常数。取 $z=z_0$，有 $h(z_0)=f(z_0)e^{-c_0}=1$，因此 $h(z)\equiv1$，即 $f(z)=e^{g(z)}$ 对所有 $z\in\Omega$ 成立。
+\end{proof}
+
+\subsubsection{复幂函数 $z^\alpha$}
+
+有了对数分支后，对任意复数 $\alpha$，可以定义 $z^\alpha$。设 $\Omega$ 是单连通区域，$1\in\Omega$ 且 $0\notin\Omega$，取定满足 $\log 1=0$ 的对数分支，定义
+\[
+z^\alpha = e^{\alpha \log z},\quad z\in\Omega .
+\]
+此时 $1^\alpha = 1$。若 $\alpha=1/n$（$n$ 为正整数），则
+\[
+(z^{1/n})^n = \prod_{k=1}^n e^{\frac{1}{n}\log z} = e^{\log z} = z ,
+\]
+因此 $z^{1/n}$ 确实是 $z$ 的一个 $n$ 次方根。
+
+通过选取不同的对数分支，可以得到 $z^\alpha$ 的不同分支。这为处理多值函数提供了统一而严格的框架。
+
+\subsubsection{逻辑脉络总结}
+
+本节从复对数的多值性问题出发，利用上一节建立的单连通区域理论，严格构造了对数函数的分支。核心思路是：
+
+\begin{itemize}
+    \item 将对数定义为一个积分（$1/z$ 的原函数），单连通性保证了积分与路径无关。
+    \item 通过求导验证 $e^{F(z)}=z$，从而确保 $F$ 确实是指数函数的逆。
+    \item 将这一技巧推广到任意非零全纯函数，得到一般的对数存在定理。
+    \item 在此基础上自然引入复幂函数的定义。
+\end{itemize}
+
+这一套方法完美地展示了复分析中“拓扑性质（单连通）决定解析性质（原函数存在）”的中心思想，也为下一章留数定理的应用（如辐角原理）打下了基础。
+
+\end{document}

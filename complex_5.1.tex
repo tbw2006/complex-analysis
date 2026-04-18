@@ -1,0 +1,144 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：5.1节 Jensen公式}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}{例}[section]
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{section}{5}
+\setcounter{subsection}{0}
+\subsection{Jensen公式}
+
+在本节中，我们记 $D_R$ 为以原点为中心、半径为 $R$ 的开圆盘，$C_R$ 为其边界圆周。本节始终排除函数恒为零的平凡情形。Jensen公式建立了全纯函数在圆盘内的零点个数、圆心的模长以及圆周上的对数平均值三者之间的深刻联系，它是研究整函数增长阶与零点分布关系的核心工具。
+
+\begin{theorem}[Jensen公式]
+设 $\Omega$ 是包含闭圆盘 $\overline{D_R}$ 的一个开集，$f$ 在 $\Omega$ 内全纯，且 $f(0)\neq0$，$f$ 在圆周 $C_R$ 上无零点。若 $z_1,\dots,z_N$ 是 $f$ 在圆盘 $D_R$ 内的全部零点（按重数计数），则
+\begin{equation}\label{eq:jensen}
+\log|f(0)| = \sum_{k=1}^{N} \log\left(\frac{|z_k|}{R}\right) + \frac{1}{2\pi} \int_0^{2\pi} \log|f(Re^{i\theta})| \, d\theta .
+\end{equation}
+\end{theorem}
+
+\begin{proof}[证明思路]
+定理的证明分四步进行：
+\begin{enumerate}
+    \item 验证公式对函数的乘积具有可加性，从而可将一般情形归结为两类特殊函数：无处为零的函数和形如 $z-w$ 的一次因式。
+    \item 对于在 $\overline{D_R}$ 内无处为零的函数，可将其写为 $e^{h(z)}$，此时 $\log|f| = \operatorname{Re}(h)$，利用调和函数的均值性质即得结论。
+    \item 对于 $f(z)=z-w$（$w\in D_R$），通过计算积分直接验证公式成立。
+    \item 将一般函数分解为上述两种函数的乘积，由第1步的可加性完成证明。
+\end{enumerate}
+\end{proof}
+
+\begin{proof}[详细证明]
+\textbf{第1步：乘积的可加性。}
+设 $f_1$ 和 $f_2$ 都满足定理条件且公式对它们成立。则对乘积 $f_1f_2$，其零点集是两者零点集的并（按重数相加），而 $\log|f_1f_2| = \log|f_1| + \log|f_2|$。因此公式右边各项分别相加后仍成立。这说明只需对“基本构件”证明公式即可。
+
+\textbf{第2步：无处为零的函数。}
+设 $g$ 在 $\overline{D_R}$ 内全纯且无零点。我们断言：
+\[
+\log|g(0)| = \frac{1}{2\pi} \int_0^{2\pi} \log|g(Re^{i\theta})| \, d\theta .
+\]
+在比 $D_R$ 稍大的圆盘内，$g$ 仍无零点。由于圆盘是单连通的，根据定理6.2（第3章），存在全纯函数 $h$ 使得 $g(z) = e^{h(z)}$。于是
+\[
+|g(z)| = |e^{h(z)}| = e^{\operatorname{Re}(h(z))}, \quad \log|g(z)| = \operatorname{Re}(h(z)).
+\]
+调和函数 $\operatorname{Re}(h)$ 满足均值性质（第3章推论7.3），因此
+\[
+\operatorname{Re}(h(0)) = \frac{1}{2\pi} \int_0^{2\pi} \operatorname{Re}(h(Re^{i\theta})) \, d\theta ,
+\]
+这正是所需的等式。
+
+\textbf{第3步：一次因式 $f(z)=z-w$。}
+设 $w\in D_R$，需证
+\[
+\log|w| = \log\left(\frac{|w|}{R}\right) + \frac{1}{2\pi} \int_0^{2\pi} \log|Re^{i\theta} - w| \, d\theta .
+\]
+由于 $\log(|w|/R) = \log|w| - \log R$ 且
+\[
+\log|Re^{i\theta} - w| = \log R + \log|e^{i\theta} - w/R|,
+\]
+代入后两边 $\log R$ 抵消，原等式等价于
+\[
+\int_0^{2\pi} \log|e^{i\theta} - a| \, d\theta = 0, \quad |a|<1,
+\]
+其中 $a = w/R$。作变量代换 $\theta\mapsto -\theta$，只需证
+\[
+\int_0^{2\pi} \log|1 - a e^{i\theta}| \, d\theta = 0, \quad |a|<1.
+\]
+考虑函数 $F(z) = 1 - az$，它在单位闭圆盘内无零点。如第2步，存在全纯函数 $G$ 使得 $F(z)=e^{G(z)}$，从而 $\log|F(z)| = \operatorname{Re}(G(z))$。由于 $F(0)=1$，有 $\log|F(0)|=0$。对调和函数 $\log|F(z)|$ 应用均值性质，即得所需积分恒等式。
+
+\textbf{第4步：一般情形。}
+将 $f(z)$ 在 $\overline{D_R}$ 内的零点 $z_1,\dots,z_N$ 全部提取出来，令
+\[
+g(z) = \frac{f(z)}{(z-z_1)\cdots(z-z_N)} .
+\]
+每个 $z_k$ 都是 $g$ 的可去奇点，且补充定义后 $g$ 在 $\overline{D_R}$ 内全纯且无零点。于是 $f(z) = g(z)\prod_{k=1}^N (z-z_k)$。对 $g$ 应用第2步的公式，对每个因式 $(z-z_k)$ 应用第3步的公式，再由第1步的可加性，即得Jensen公式~\eqref{eq:jensen}。
+\end{proof}
+
+\subsubsection{Jensen公式的积分形式}
+
+从Jensen公式可以导出一个便于估计的积分恒等式。设 $\mathfrak{n}(r)$ 表示 $f$ 在圆盘 $D_r$ 内的零点个数（按重数计数）。若 $f(0)\neq0$ 且 $f$ 在 $C_R$ 上无零点，则
+\begin{equation}\label{eq:jensen-integral}
+\int_0^R \mathfrak{n}(r) \frac{dr}{r} = \frac{1}{2\pi} \int_0^{2\pi} \log|f(Re^{i\theta})| \, d\theta - \log|f(0)|.
+\end{equation}
+
+\begin{lemma}\label{lem:zero-sum}
+若 $z_1,\dots,z_N$ 是 $f$ 在 $D_R$ 内的零点，则
+\[
+\sum_{k=1}^N \log\left|\frac{R}{z_k}\right| = \int_0^R \mathfrak{n}(r) \frac{dr}{r}.
+\]
+\end{lemma}
+\begin{proof}
+首先注意到
+\[
+\sum_{k=1}^N \log\left|\frac{R}{z_k}\right| = \sum_{k=1}^N \int_{|z_k|}^R \frac{dr}{r}.
+\]
+定义特征函数 $\eta_k(r) = 1$ 若 $r > |z_k|$，否则为 $0$。则 $\sum_{k=1}^N \eta_k(r) = \mathfrak{n}(r)$。于是
+\[
+\sum_{k=1}^N \int_{|z_k|}^R \frac{dr}{r} = \sum_{k=1}^N \int_0^R \eta_k(r)\frac{dr}{r} = \int_0^R \mathfrak{n}(r)\frac{dr}{r},
+\]
+得证。
+\end{proof}
+
+将引理代入Jensen公式~\eqref{eq:jensen}，立刻得到积分形式~\eqref{eq:jensen-integral}。这一形式在估计整函数的零点密度时极为方便。
+
+\subsubsection{例子：$\sin \pi z$ 的Jensen公式验证}
+
+\begin{example}
+考虑整函数 $f(z) = \sin \pi z$。它在圆盘 $D_R$ 内的零点为整数 $n$ 满足 $|n|<R$。取 $R$ 不是整数，以保证圆周上无零点。由Euler公式，
+\[
+|\sin \pi z| = \left| \frac{e^{i\pi z} - e^{-i\pi z}}{2i} \right| \le e^{\pi |z|},
+\]
+故当 $R$ 很大时，$\log|f(Re^{i\theta})| \le \pi R$。另一方面，可以更精确地计算出
+\[
+\frac{1}{2\pi} \int_0^{2\pi} \log|\sin(\pi R e^{i\theta})| \, d\theta = \log\left(\frac{e^{\pi R}}{2}\right) + o(1) \quad (R\to\infty).
+\]
+而 $f(0)=0$，Jensen公式需稍作修改（考虑 $f(z)/z$ 等）。但积分形式~\eqref{eq:jensen-integral} 仍能给出零点个数 $\mathfrak{n}(R) \sim 2R$，这与 $\sin \pi z$ 在 $[-R,R]$ 内约有 $2R$ 个零点的事实相符。
+\end{example}
+
+\subsubsection{逻辑脉络总结}
+
+\begin{itemize}
+    \item \textbf{Jensen公式} 将全纯函数在圆心的模长、圆周上的对数平均值、以及圆内零点的分布三者紧密联系起来。
+    \item 其证明通过“分解为基本构件”的策略，充分利用了全纯函数的局部对数存在性和调和函数的均值性质。
+    \item \textbf{积分形式} 是研究整函数增长阶与零点分布关系的核心工具，为后续Hadamard因子分解定理奠定了基础。
+\end{itemize}
+
+\end{document}
