@@ -1,0 +1,247 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：第5.3节 无限乘积}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}{例}[section]
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\section{无限乘积}
+
+我们已经在第3章和第5章的前面部分看到过无穷乘积的身影，例如欧拉的正弦函数乘积公式。现在我们要系统地研究无穷乘积的收敛性，并利用它来构造在任意给定点列上为零的整函数。
+
+\subsection{无限乘积的一般理论}
+
+\begin{definition}
+给定一列复数 \(\{a_n\}_{n=1}^\infty\)，若部分积的极限
+\begin{equation}
+\lim_{N \to \infty} \prod_{n=1}^N (1 + a_n)
+\end{equation}
+存在，则称无穷乘积 \(\prod_{n=1}^\infty (1 + a_n)\) 收敛。
+\end{definition}
+
+研究无穷乘积的收敛性通常转化为研究对应级数 \(\sum \log(1 + a_n)\) 的收敛性。一个重要的充分条件如下：
+
+\begin{theorem}\label{thm:product-conv}
+如果 \(\sum |a_n| < \infty\)，则乘积 \(\prod (1 + a_n)\) 收敛。并且，该乘积收敛到 \(0\) 当且仅当存在某个因子为 \(0\)（即某个 \(a_n = -1\)）。
+\end{theorem}
+
+\begin{proof}
+若 \(\sum |a_n|\) 收敛，则对于足够大的 \(n\)，有 \(|a_n| < 1/2\)。对于 \(|z| < 1/2\)，我们可以用幂级数定义 \(\log(1+z)\) 的主支，且有估计
+\begin{equation}\label{eq:log-est}
+|\log(1+z)| \le 2|z|.
+\end{equation}
+（这一估计由对数函数的泰勒展开 \(\log(1+z) = \sum_{n=1}^\infty (-1)^{n-1} z^n/n\) 以及当 \(|z| \le 1/2\) 时的几何级数放缩得到。）
+
+设 \(b_n = \log(1 + a_n)\)，由 \eqref{eq:log-est} 知 \(|b_n| \le 2|a_n|\)，因此 \(\sum b_n\) 绝对收敛。部分积可写为
+\[
+\prod_{n=1}^N (1 + a_n) = \exp\Bigl( \sum_{n=1}^N b_n \Bigr).
+\]
+令 \(N \to \infty\)，由指数函数的连续性即得乘积收敛，且极限为 \(e^{\sum b_n} \neq 0\)（只要无因子为 \(0\)）。
+\end{proof}
+
+对于函数项无穷乘积，我们有相应的收敛定理：
+
+\begin{theorem}\label{thm:func-product}
+设 \(\{F_n\}\) 是开集 \(\Omega\) 上的一列全纯函数，若存在常数 \(c_n > 0\) 使得 \(\sum c_n < \infty\)，且对所有 \(z \in \Omega\) 和所有 \(n\) 有
+\[
+|F_n(z) - 1| \le c_n,
+\]
+则：
+\begin{enumerate}
+\item 乘积 \(\prod_{n=1}^\infty F_n(z)\) 在 \(\Omega\) 上内闭一致收敛到一个全纯函数 \(F(z)\)。
+\item 若对所有 \(n\)，\(F_n(z) \neq 0\)，则
+\begin{equation}\label{eq:log-deriv}
+\frac{F'(z)}{F(z)} = \sum_{n=1}^\infty \frac{F_n'(z)}{F_n(z)}.
+\end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(i) 一致收敛性}：因为 \(\sum c_n < \infty\)，有 \(c_n \to 0\)。存在 \(N\) 使得当 \(n > N\) 时 \(c_n \le 1/2\)。此时对一切 \(z \in \Omega\)，\(|F_n(z)-1| \le 1/2\)，故 \(F_n(z)\) 落在圆盘 \(|w-1| \le 1/2\) 内，可以定义单值解析的 \(\log F_n(z)\)。由估计 \eqref{eq:log-est}，
+\[
+|\log F_n(z)| \le 2|F_n(z)-1| \le 2c_n.
+\]
+因为 \(\sum 2c_n\) 收敛且右端与 \(z\) 无关，由 Weierstrass \(M\)-判别法，级数 \(\sum_{n > N} \log F_n(z)\) 在 \(\Omega\) 上一致收敛。部分乘积写为
+\[
+\prod_{n=1}^M F_n(z) = \Bigl( \prod_{n=1}^N F_n(z) \Bigr) \exp\Bigl( \sum_{n=N+1}^M \log F_n(z) \Bigr),
+\]
+令 \(M \to \infty\)，由指数函数连续性得一致收敛性，且极限 \(F(z)\) 全纯。
+
+\textbf{(ii) 对数导数公式}：在任一紧子集 \(K \subset \Omega\) 上，部分积 \(G_M(z) = \prod_{n=1}^M F_n(z)\) 一致收敛到 \(F\)，且因各因子不取零，\(G_M\) 在 \(K\) 上有非零下界。由第2章定理（全纯函数序列一致收敛则导数一致收敛），\(G_M' \to F'\) 在 \(K\) 上一致。于是 \(G_M'/G_M \to F'/F\) 一致。又
+\[
+\frac{G_M'}{G_M} = \sum_{n=1}^M \frac{F_n'}{F_n},
+\]
+令 \(M \to \infty\) 即得 \eqref{eq:log-deriv}。
+\end{proof}
+
+\subsection{核心例子：正弦函数的乘积公式}
+
+在引入一般构造方法之前，我们先来看一个经典的、起启发作用的例子。
+
+\begin{theorem}[正弦函数的乘积公式]\label{thm:sin-prod}
+对所有复数 \(z\)，
+\begin{equation}\label{eq:sin-prod}
+\frac{\sin \pi z}{\pi} = z \prod_{n=1}^\infty \left(1 - \frac{z^2}{n^2}\right).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+推导利用余切函数的展开式。在第3章已证明：
+\begin{equation}\label{eq:cot}
+\pi \cot \pi z = \frac{1}{z} + \sum_{n=1}^\infty \frac{2z}{z^2 - n^2} = \lim_{N \to \infty} \sum_{|n| \le N} \frac{1}{z+n}.
+\end{equation}
+设
+\[
+G(z) = \frac{\sin \pi z}{\pi}, \qquad P(z) = z \prod_{n=1}^\infty \left(1 - \frac{z^2}{n^2}\right).
+\]
+由 \(\sum 1/n^2 < \infty\) 和定理 \ref{thm:func-product} 知，乘积 \(P(z)\) 收敛且在不含整数的区域全纯。对 \(P(z)\) 取对数导数：
+\[
+\frac{P'(z)}{P(z)} = \frac{1}{z} + \sum_{n=1}^\infty \frac{2z}{z^2 - n^2}.
+\]
+与 \eqref{eq:cot} 比较，得
+\[
+\frac{P'(z)}{P(z)} = \pi \cot \pi z = \frac{G'(z)}{G(z)}.
+\]
+因此 \((P/G)' = 0\)，存在常数 \(c\) 使得 \(P(z) = c G(z)\)。两边同除以 \(z\) 并令 \(z \to 0\)，由于 \(\sin \pi z / (\pi z) \to 1\) 且乘积项趋于 \(1\)，得到 \(c = 1\)。公式得证。
+\end{proof}
+
+这个公式说明：\(\sin \pi z\) 的零点恰好是整数 \(\mathbb{Z}\)，而它可以表示为按其零点展开的无穷乘积。这启发了Weierstrass的一般构造。
+
+\subsection{Weierstrass 无限乘积}
+
+现在我们要处理一般情形：给定任意无有限聚点的复数序列 \(\{a_n\}\)，构造一个整函数，使其零点恰好是这些 \(a_n\)。
+
+\subsubsection{动机与困难}
+
+天真的想法是直接模仿正弦函数，写 \(\prod (1 - z/a_n)\)。问题在于：当 \(\{a_n\}\) 增长不够快时（例如 \(a_n = n\)），级数 \(\sum 1/|a_n|\) 发散，这个乘积可能不收敛。Weierstrass 的想法是插入指数因子，在不引入新零点的前提下强制乘积收敛。
+
+\subsubsection{Weierstrass 基本因子}
+
+\begin{definition}\label{def:Ek}
+对整数 \(k \ge 0\)，定义\textbf{Weierstrass 基本因子}为：
+\[
+E_0(z) = 1 - z,
+\]
+\[
+E_k(z) = (1 - z) \exp\left(z + \frac{z^2}{2} + \dots + \frac{z^k}{k}\right), \quad k \ge 1.
+\]
+整数 \(k\) 称为该因子的\textbf{次数}。
+\end{definition}
+
+这些因子保持了 \(1 - z\) 在 \(z = 1\) 处的零点。指数项的作用是在 \(z\) 接近 \(0\) 时“抵消”掉 \(\log(1 - z)\) 展开式的前 \(k\) 项，使得 \(E_k(z)\) 在原点附近非常接近 \(1\)。
+
+\begin{remark}
+在 \(|z| < 1\) 内，我们用幂级数定义出单值的对数分支。在此局部定义下，
+\[
+\log E_k(z) = \log(1-z) + z + \frac{z^2}{2} + \cdots + \frac{z^k}{k} = -\sum_{n=k+1}^\infty \frac{z^n}{n}.
+\]
+这个等式是\textbf{形式记号}，它代表我们在某个固定的局部单值分支下工作，并非对多值全局对数的滥用。
+\end{remark}
+
+\subsubsection{关键估计}
+
+为了在无穷乘积中使用这些因子，我们需要定量地知道当 \(|z|\) 较小时，\(E_k(z)\) 距离 \(1\) 有多近。
+
+\begin{lemma}\label{lem:Ek-est}
+若 \(|z| \le 1/2\)，则存在常数 \(c > 0\)（与 \(k\) 无关），使得
+\begin{equation}
+|1 - E_k(z)| \le c |z|^{k+1}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+当 \(|z| \le 1/2\) 时，定义 \(\log(1 - z)\) 为其幂级数主支。由定义 \ref{def:Ek}，
+\[
+E_k(z) = \exp\Bigl( \log(1 - z) + z + \frac{z^2}{2} + \dots + \frac{z^k}{k} \Bigr)
+= \exp\Bigl( -\sum_{n=k+1}^\infty \frac{z^n}{n} \Bigr) = e^w,
+\]
+其中 \(w = -\sum_{n=k+1}^\infty z^n/n\)。估计
+\[
+|w| \le \sum_{n=k+1}^\infty \frac{|z|^n}{n} \le \frac{|z|^{k+1}}{1 - |z|} \le 2|z|^{k+1}.
+\]
+因为 \(|w| \le 1\)，由指数函数的局部李普希茨性质，存在绝对常数 \(c'\) 使得 \(|1 - e^w| \le c' |w|\)。取 \(c = 2c'\) 即得结论。
+\end{proof}
+
+这个不等式的关键之处在于：常数 \(c\) 与 \(k\) 无关。这意味着对于不同的 \(n\) 我们可以选择不同的次数 \(k_n\)，而误差估计仍能保持一致性的控制。
+
+\subsubsection{Weierstrass 乘积定理}
+
+\begin{theorem}[Weierstrass 乘积定理]\label{thm:weierstrass}
+给定任意一列复数 \(\{a_n\}\) 满足 \(\lim_{n \to \infty} |a_n| = \infty\)。则存在一个整函数 \(f\)，其零点恰好为这些 \(a_n\)（计重数），且别无其他零点。任何其他这样的整函数必形如 \(f(z) e^{g(z)}\)，其中 \(g\) 为整函数。
+\end{theorem}
+
+\begin{proof}
+\textbf{唯一性部分}：若 \(f_1\) 和 \(f_2\) 是具有完全相同零点（计重数）的整函数，则 \(h = f_1/f_2\) 的奇点均为可去，延拓为整函数且无零点。于是存在整函数 \(g\) 使得 \(h(z) = e^{g(z)}\)，即 \(f_1 = f_2 e^g\)。
+
+\textbf{存在性构造}：设原点为零点重数 \(m \ge 0\)，先提出因子 \(z^m\)。以下设所有 \(a_n \neq 0\)。
+
+\textbf{第1步：选择次数 \(k_n\)}。我们需要选取一列非负整数 \(k_n\)，使对任意 \(R > 0\)，级数 \(\sum (R/|a_n|)^{k_n+1}\) 收敛。例如，可简单地取 \(k_n = n-1\)。因为 \(|a_n| \to \infty\)，对固定 \(R\)，当 \(n\) 充分大时 \(R/|a_n| \le 1/2\)，级数通项被几何级数控制。
+
+\textbf{第2步：定义候选函数}。
+\[
+f(z) = z^m \prod_{n=1}^\infty E_{k_n}(z/a_n).
+\]
+
+\textbf{第3步：证明收敛性}。固定 \(R > 0\)，考虑圆盘 \(|z| \le R\)。由于 \(|a_n| \to \infty\)，存在 \(N\) 使当 \(n > N\) 时 \(|a_n| \ge 2R\)。此时对 \(|z| \le R\)，\(|z/a_n| \le 1/2\)。由引理 \ref{lem:Ek-est}，
+\[
+|1 - E_{k_n}(z/a_n)| \le c \left| \frac{z}{a_n} \right|^{k_n+1} \le c \left( \frac{R}{|a_n|} \right)^{k_n+1}.
+\]
+由 \(k_n\) 的选取，\(\sum_{n > N} c (R/|a_n|)^{k_n+1}\) 收敛。根据定理 \ref{thm:func-product}，无穷乘积 \(\prod_{n > N} E_{k_n}(z/a_n)\) 在 \(|z| \le R\) 上一致收敛且不取零。乘以有限个因子后，\(f\) 在 \(|z| \le R\) 内全纯，零点恰为落在该圆盘内的 \(a_n\)。因 \(R\) 任意，\(f\) 是整函数。
+\end{proof}
+
+\subsection{典型例题}
+
+\begin{example}[重新发现正弦函数]
+零点：\(a_n = n\)（\(n \neq 0\)）。取所有 \(k_n = 1\)，验证 \(\sum (R/|n|)^2 = R^2 \sum 1/n^2 < \infty\)。Weierstrass 乘积为
+\[
+z \prod_{n \neq 0} E_1(z/n) = z \prod_{n \neq 0} \Bigl( 1 - \frac{z}{n} \Bigr) e^{z/n}.
+\]
+将 \(n\) 和 \(-n\) 配对：
+\[
+\Bigl( 1 - \frac{z}{n} \Bigr) e^{z/n} \Bigl( 1 + \frac{z}{n} \Bigr) e^{-z/n} = 1 - \frac{z^2}{n^2}.
+\]
+乘积化为 \(z \prod_{n=1}^\infty (1 - z^2/n^2)\)，正是定理 \ref{thm:sin-prod} 中的正弦函数乘积公式。
+\end{example}
+
+\begin{example}[构造快速增长的零点]
+设零点为 \(a_n = 2^n\)（单零点）。因 \(|a_n|\) 增长极快，可取所有 \(k_n = 0\)。级数 \(\sum |z|/2^n = |z|\) 收敛。乘积
+\[
+f(z) = \prod_{n=1}^\infty \Bigl( 1 - \frac{z}{2^n} \Bigr)
+\]
+定义了一个整函数，零点恰为 \(2, 4, 8, \dots\)。
+\end{example}
+
+\begin{example}[不同次数的影响]
+零点仍为 \(a_n = n\)。若取 \(k_n = 2\)，乘积为
+\[
+z \prod_{n \neq 0} \Bigl( 1 - \frac{z}{n} \Bigr) e^{z/n + z^2/(2n^2)}.
+\]
+这与取 \(k_n = 1\) 的结果相差一个形如 \(e^{c z^2}\) 的整函数因子，表明满足条件的函数不唯一，它们之间相差 \(e^{g(z)}\)。
+\end{example}
+
+\textbf{总结}：
+\begin{itemize}
+\item 无穷乘积的收敛性等价于对应级数 \(\sum \log(1+a_n)\) 的收敛，绝对收敛的充分条件是 \(\sum |a_n| < \infty\)。
+\item Weierstrass 因子 \(E_k(z)\) 的设计目的是在 \(z\) 接近 \(0\) 时足够接近 \(1\)，使得当 \(|a_n|\) 增长时，\(\prod E_{k_n}(z/a_n)\) 能收敛。
+\item Weierstrass 乘积定理表明：任意无聚点的复数序列都可以作为某个整函数的零点集，且解在相差一个无零点整函数因子的意义下唯一。
+\end{itemize}
+
+\end{document}

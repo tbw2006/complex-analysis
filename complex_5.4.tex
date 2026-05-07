@@ -1,0 +1,177 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：第5.4节 Weierstrass 无限乘积}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}{例}[section]
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\section{Weierstrass 无限乘积}
+
+在第5.3节中，我们研究了无穷乘积的一般性质，并看到了一个核心例子：正弦函数的乘积公式。该公式将 \(\sin \pi z\) 表示为其零点上的乘积。现在我们要解决一般问题：给定任意一个无有限聚点的复数序列，能否构造一个整函数，使其零点恰好为这些点？Weierstrass 给出了肯定的回答。
+
+\subsection{问题的提出与动机}
+
+给定任意一列复数 \(\{a_n\}\)，满足 \(\lim_{n\to\infty} |a_n| = \infty\)。我们想构造一个整函数 \(f\)，使其零点恰好为这些 \(a_n\)（计重数），且别无其他零点。
+
+\textbf{天真的尝试}：模仿正弦函数，直接写乘积
+\[
+\prod_{n=1}^\infty \left(1 - \frac{z}{a_n}\right).
+\]
+但问题马上出现：若 \(a_n = n\)，则级数 \(\sum 1/|a_n| = \sum 1/n\) 发散，因此该乘积不绝对收敛。为了保证收敛，需要在不引入新零点的前提下，向每个因子中插入适当的收敛因子。这正是 Weierstrass 的巧思。
+
+\subsection{Weierstrass 基本因子}
+
+\begin{definition}\label{def:canonical}
+对每个整数 \(k \ge 0\)，定义\textbf{Weierstrass 基本因子}（canonical factors）为：
+\[
+E_0(z) = 1 - z,
+\]
+\[
+E_k(z) = (1 - z) \exp\left(z + \frac{z^2}{2} + \dots + \frac{z^k}{k}\right), \quad k \ge 1.
+\]
+整数 \(k\) 称为该因子的\textbf{次数}（degree）。
+\end{definition}
+
+这些因子的巧妙之处在于：
+\begin{itemize}
+\item 它们保持了 \(1 - z\) 在 \(z = 1\) 处的零点；
+\item 指数部分 \(\exp(z + z^2/2 + \dots + z^k/k)\) 的作用是在 \(z\) 接近原点时“抵消”掉 \(\log(1 - z)\) 展开式的前 \(k\) 项。事实上，在 \(|z| < 1\) 内取幂级数定义的对数分支，有
+\[
+\log(1 - z) = -\sum_{n=1}^\infty \frac{z^n}{n},
+\]
+因此
+\[
+\log E_k(z) = \log(1 - z) + z + \frac{z^2}{2} + \dots + \frac{z^k}{k} = -\sum_{n=k+1}^\infty \frac{z^n}{n}.
+\]
+所以 \(\log E_k(z)\) 的幂级数从 \(z^{k+1}\) 次项开始，从而当 \(z \to 0\) 时，\(E_k(z) \to 1\) 非常快。
+\end{itemize}
+
+\begin{remark}
+这里关于对数的运算是在\textbf{局部单值分支}下进行的。由于我们始终在 \(|z| < 1\)（甚至更小的 \(|z| \le 1/2\)）的区域内工作，可以用幂级数定义出一个没有歧义的对数函数。在这种局部定义下，加法公式成立，不会与全局多值对数产生冲突。
+\end{remark}
+
+\subsection{关键估计}
+
+为了在无穷乘积中使用这些因子，我们需要精确地知道当 \(|z|\) 较小时，\(E_k(z)\) 距离 \(1\) 有多近。
+
+\begin{lemma}\label{lem:canonical-est}
+若 \(|z| \le 1/2\)，则存在常数 \(c > 0\)（与 \(k\) 无关），使得
+\begin{equation}\label{eq:canonical-bound}
+|1 - E_k(z)| \le c |z|^{k+1}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+当 \(|z| \le 1/2\) 时，可用幂级数主支定义 \(\log(1 - z)\)。由定义 \ref{def:canonical} 有
+\[
+E_k(z) = \exp\Bigl( \log(1 - z) + z + \frac{z^2}{2} + \dots + \frac{z^k}{k} \Bigr)
+= \exp\Bigl( -\sum_{n=k+1}^\infty \frac{z^n}{n} \Bigr) = e^w,
+\]
+其中 \(w = -\sum_{n=k+1}^\infty z^n/n\)。现在估计 \(w\)：
+\[
+|w| \le \sum_{n=k+1}^\infty \frac{|z|^n}{n} \le \sum_{n=k+1}^\infty |z|^n = \frac{|z|^{k+1}}{1 - |z|} \le 2|z|^{k+1}.
+\]
+由于 \(|w| \le 1\)，指数函数满足局部 Lipschitz 估计：存在绝对常数 \(c'\)（可设为 \(e\)）使 \(|1 - e^w| \le c' |w|\)。因此
+\[
+|1 - E_k(z)| = |1 - e^w| \le c' |w| \le 2c' |z|^{k+1}.
+\]
+取 \(c = 2c'\) 即完成证明。
+\end{proof}
+
+这个估计至关重要，因为常数 \(c\) 与 \(k\) 无关。这意味着我们可以对不同的 \(n\) 选择不同的次数 \(k_n\)，而误差控制仍然一致有效。
+
+\subsection{Weierstrass 乘积定理}
+
+现在可以陈述并证明本节的主要定理。
+
+\begin{theorem}[Weierstrass 乘积定理]\label{thm:weierstrass}
+给定任意复数序列 \(\{a_n\}\)，满足 \(\lim_{n\to\infty} |a_n| = \infty\)。则存在一个整函数 \(f\)，其零点恰好为这些 \(a_n\)（计重数），且别无其他零点。任何其他这样的整函数必形如 \(f(z) e^{g(z)}\)，其中 \(g\) 为整函数。
+\end{theorem}
+
+\begin{proof}
+\textbf{唯一性部分}：若 \(f_1\) 与 \(f_2\) 是具有完全相同零点（计重数）的整函数，则商 \(h = f_1/f_2\) 的所有奇点均为可去，延拓为整函数且无零点。于是存在整函数 \(g\) 使 \(h(z) = e^{g(z)}\)，即 \(f_1(z) = f_2(z) e^{g(z)}\)。
+
+\textbf{存在性构造}：设原点要求有 \(m\) 重零点（若原点不是零点则 \(m = 0\)）。先提出因子 \(z^m\)。以下设所有 \(a_n \neq 0\)。
+
+\textbf{第1步：选取次数 \(k_n\)}。我们要选一列非负整数 \(k_n\)，使得对任意 \(R > 0\)，级数
+\[
+\sum_{n=1}^\infty \Bigl( \frac{R}{|a_n|} \Bigr)^{k_n+1}
+\]
+收敛。例如，一个简单的取法是令 \(k_n = n-1\)。因为 \(|a_n| \to \infty\)，对固定 \(R\)，当 \(n\) 充分大时 \(R/|a_n| \le 1/2\)，于是级数通项被几何级数控制。
+
+\textbf{第2步：定义候选函数}。
+\[
+f(z) = z^m \prod_{n=1}^\infty E_{k_n}(z/a_n).
+\]
+
+\textbf{第3步：证明收敛性}。固定任意 \(R > 0\)，考虑圆盘 \(|z| \le R\)。由于 \(|a_n| \to \infty\)，存在 \(N\) 使得当 \(n > N\) 时 \(|a_n| \ge 2R\)。此时对 \(|z| \le R\) 有 \(|z/a_n| \le 1/2\)。由引理 \ref{lem:canonical-est}，
+\[
+|1 - E_{k_n}(z/a_n)| \le c \Bigl| \frac{z}{a_n} \Bigr|^{k_n+1} \le c \Bigl( \frac{R}{|a_n|} \Bigr)^{k_n+1}.
+\]
+由 \(k_n\) 的选取，级数 \(\sum_{n > N} c (R/|a_n|)^{k_n+1}\) 收敛。根据第5.3节中关于函数项无穷乘积的收敛定理（命题3.2），无穷乘积 \(\prod_{n > N} E_{k_n}(z/a_n)\) 在 \(|z| \le R\) 上一致收敛，且其值不为零（因为每个因子都不为零）。乘以有限个因子后，\(f\) 在 \(|z| \le R\) 内全纯，其零点恰为落在该圆盘内的 \(a_n\)。因 \(R\) 任意，\(f\) 是整函数，其全部零点恰好为序列 \(\{a_n\}\)。
+\end{proof}
+
+\subsection{例题}
+
+\begin{example}[重新发现正弦函数]
+零点为所有非零整数 \(a_n = n\)。取所有 \(k_n = 1\)。验证：对任意 \(R\)，
+\[
+\sum_{n \neq 0} \Bigl( \frac{R}{|n|} \Bigr)^{2} = R^2 \sum_{n=1}^\infty \frac{2}{n^2} < \infty.
+\]
+Weierstrass 乘积为
+\[
+z \prod_{n \neq 0} E_1(z/n) = z \prod_{n \neq 0} \Bigl( 1 - \frac{z}{n} \Bigr) e^{z/n}.
+\]
+将 \(n\) 与 \(-n\) 的因子配对：
+\[
+\Bigl( 1 - \frac{z}{n} \Bigr) e^{z/n} \Bigl( 1 + \frac{z}{n} \Bigr) e^{-z/n} = 1 - \frac{z^2}{n^2}.
+\]
+因此乘积化为 \(z \prod_{n=1}^\infty \bigl( 1 - \frac{z^2}{n^2} \bigr)\)，这正是第5.3节中正弦函数的乘积公式。
+\end{example}
+
+\begin{example}[快速增长的零点]
+设零点为 \(a_n = 2^n\)（单零点）。因 \(|a_n|\) 增长极快，可取所有 \(k_n = 0\)。对固定 \(R\)，
+\[
+\sum_{n=1}^\infty \frac{R}{|a_n|} = R \sum_{n=1}^\infty 2^{-n} < \infty.
+\]
+乘积为
+\[
+f(z) = \prod_{n=1}^\infty \Bigl( 1 - \frac{z}{2^n} \Bigr).
+\]
+它定义了一个整函数，零点恰为 \(2, 4, 8, \dots\)，且无其他零点。
+\end{example}
+
+\begin{example}[不同次数的影响]
+零点仍为 \(a_n = n\)。若取 \(k_n = 2\)，则乘积为
+\[
+z \prod_{n \neq 0} \Bigl( 1 - \frac{z}{n} \Bigr) e^{z/n + z^2/(2n^2)}.
+\]
+与取 \(k_n = 1\) 的结果相比，多出了指数因子 \(e^{z^2 \sum 1/(2n^2)}\)。这表明满足条件的函数不唯一，它们之间相差一个形如 \(e^{g(z)}\) 的整函数因子，正如定理 \ref{thm:weierstrass} 所述。
+\end{example}
+
+\textbf{总结}：
+\begin{itemize}
+\item Weierstrass 基本因子 \(E_k(z)\) 的设计目的是在 \(z\) 接近 \(0\) 时极其接近 \(1\)，误差为 \(|z|^{k+1}\) 阶。
+\item 引理 \ref{lem:canonical-est} 是整个构造的技术核心，它给出了与 \(k\) 无关的定量误差控制。
+\item 通过恰当选取次数 \(k_n\)（例如 \(k_n = n-1\)），可保证无穷乘积 \(\prod E_{k_n}(z/a_n)\) 在整个复平面上内闭一致收敛，从而定义了具有指定零点的整函数。
+\end{itemize}
+
+\end{document}

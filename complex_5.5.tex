@@ -1,0 +1,278 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：第5.5节 Hadamard 分解定理}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}{例}[section]
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\section{Hadamard 分解定理}
+
+前几节的内容为我们提供了两种强有力的工具：第5.2节告诉我们，若整函数具有有限增长阶，则其零点分布受到严格限制；第5.4节的 Weierstrass 乘积定理告诉我们，对任意无聚点的零点序列，都可以构造一个整函数使其恰在该序列上为零。Hadamard 分解定理是这两种思想的深度融合：它表明对于有限阶整函数，Weierstrass 乘积中的基本因子可以取成\textbf{统一且固定的次数}，并且剩余的整函数因子可以被精确地确定为一个\textbf{多项式}。
+
+如果说 Weierstrass 定理告诉我们“任何一个整函数都可以由其零点构造出来”，那么 Hadamard 定理则进一步指出：“如果这个整函数增长得不那么快（有限阶），那么这个构造可以做得非常经济且规范”。
+
+\subsection{定理的陈述}
+
+回顾第5.2节：若整函数 \(f\) 的增长阶 \(\le \rho\)，则其零点个数 \(n(r) \le C r^\rho\)，且对任意 \(s > \rho\) 有 \(\sum |a_n|^{-s} < \infty\)，其中 \(\{a_n\}\) 是非零零点序列。
+
+在一般的 Weierstrass 构造中，因子次数 \(k_n\) 通常需要随着 \(n\) 增大（例如取 \(k_n = n-1\)）以保证收敛。Hadamard 洞察到：\textbf{如果整函数的阶有限，那么所有这些基本因子 \(E_{k_n}\) 的次数可以被取成同一个常数 \(k\)}，从而整个乘积的形式高度统一。而且，除了乘积部分外，剩下的整函数因子 \(e^{g(z)}\) 可以被精确地确定为一个\textbf{多项式}。
+
+\begin{theorem}[Hadamard 分解定理]\label{thm:hadamard}
+设 \(f\) 是一个整函数，具有有限增长阶 \(\rho_0\)。令 \(k\) 为满足
+\[
+k \le \rho_0 < k+1
+\]
+的整数。若 \(a_1, a_2, \dots\) 为 \(f\) 的非零零点（计重数），则 \(f\) 可表示为
+\begin{equation}\label{eq:hadamard}
+f(z) = e^{P(z)} z^m \prod_{n=1}^\infty E_k\!\left(\frac{z}{a_n}\right),
+\end{equation}
+其中 \(P(z)\) 是一个次数 \(\le k\) 的多项式，\(m\) 是 \(f\) 在原点处的零点重数，\(E_k\) 是次数为 \(k\) 的 Weierstrass 基本因子。
+\end{theorem}
+
+\begin{remark}
+\textbf{直观意义}：
+\begin{itemize}
+\item \textbf{统一的次数 \(k\)}：无论零点序列多么复杂，只要函数的阶是 \(\rho_0\)，我们始终可以使用固定次数 \(k = \lfloor \rho_0 \rfloor\) 的基本因子来构造乘积。
+\item \textbf{指数因子是多项式}：在 Weierstrass 定理中，剩下的因子是一个任意整函数 \(e^{g(z)}\)。Hadamard 定理告诉我们，由于增长的限制，\(g(z)\) 不能是任意的，它必须是一个次数不超过 \(k\) 的多项式。
+\end{itemize}
+\end{remark}
+
+\subsection{主要引理}
+
+在证明定理之前，我们需要两个关于基本因子 \(E_k(z)\) 的下界估计，以及一个关于避开“坏点”的技术性推论。
+
+\begin{lemma}\label{lem:Ek-lower}
+基本因子 \(E_k(z)\) 满足
+\begin{equation}
+|E_k(z)| \ge e^{-c |z|^{k+1}} \quad \text{当} \quad |z| \le 1/2,
+\end{equation}
+以及
+\begin{equation}
+|E_k(z)| \ge |1 - z| \, e^{-c' |z|^k} \quad \text{当} \quad |z| \ge 1/2,
+\end{equation}
+其中 \(c, c' > 0\) 是绝对常数。
+\end{lemma}
+
+\begin{proof}
+\textbf{当 \(|z| \le 1/2\)}：如第5.4节所做，在 \(|z| \le 1/2\) 时可用幂级数定义对数，有
+\[
+E_k(z) = \exp\Bigl( -\sum_{n=k+1}^\infty \frac{z^n}{n} \Bigr) = e^w,
+\]
+其中 \(|w| \le c |z|^{k+1}\)。因此 \(|E_k(z)| = |e^w| = e^{\operatorname{Re}(w)} \ge e^{-|w|} \ge e^{-c|z|^{k+1}}\)。
+
+\textbf{当 \(|z| \ge 1/2\)}：直接写
+\[
+|E_k(z)| = |1 - z| \cdot \bigl|\exp(z + z^2/2 + \dots + z^k/k)\bigr|.
+\]
+指数部分中的多项式次数为 \(k\)，其模可被 \(e^{c'|z|^k}\) 控制，因此倒数满足 \(\ge e^{-c'|z|^k}\)。两因子相乘即得结论。
+\end{proof}
+
+\begin{lemma}\label{lem:prod-lower}
+设整函数 \(f\) 的增长阶为 \(\rho_0\)，\(k\) 满足 \(k \le \rho_0 < k+1\)，\(s\) 是满足 \(\rho_0 < s < k+1\) 的实数。则存在常数 \(c > 0\)，使得对所有不在那些以 \(a_n\) 为中心、半径为 \(|a_n|^{-k-1}\) 的小圆盘内的 \(z\)，有
+\[
+\Bigl| \prod_{n=1}^\infty E_k(z/a_n) \Bigr| \ge e^{-c|z|^s}.
+\]
+\end{lemma}
+
+\begin{proof}
+记 \(P(z) = \prod_{n=1}^\infty E_k(z/a_n)\)。将乘积分成两部分：\(|a_n| > 2|z|\) 和 \(|a_n| \le 2|z|\)。
+
+\textbf{第一步：远因子（\(|a_n| > 2|z|\)）}。此时 \(|z/a_n| \le 1/2\)。由引理 \ref{lem:Ek-lower} 的第一个不等式，
+\[
+|E_k(z/a_n)| \ge e^{-c_1 |z/a_n|^{k+1}}.
+\]
+取乘积后指数上的和为 \(\sum_{|a_n| > 2|z|} |z/a_n|^{k+1}\)。因为 \(|a_n| > 2|z|\) 且 \(s < k+1\)，
+\begin{align}
+\Bigl| \frac{z}{a_n} \Bigr|^{k+1}
+&= \frac{|z|^{k+1}}{|a_n|^{k+1}}
+= \frac{|z|^{k+1}}{|a_n|^s \, |a_n|^{k+1-s}} \nonumber\\
+&\le \frac{|z|^{k+1}}{|a_n|^s \, (2|z|)^{k+1-s}}
+= \frac{|z|^s}{2^{k+1-s} \, |a_n|^s}.
+\end{align}
+因 \(s > \rho_0\)，由第5.2节定理 (ii) 知 \(\sum |a_n|^{-s} < \infty\)。故指数上的和被 \(C_2 |z|^s\) 控制。从而远因子乘积 \(\ge e^{-C_3 |z|^s}\)。
+
+\textbf{第二步：近因子（\(|a_n| \le 2|z|\)）}。此时 \(|z/a_n| \ge 1/2\)。由引理 \ref{lem:Ek-lower} 的第二个不等式，
+\[
+|E_k(z/a_n)| \ge |1 - z/a_n| \, e^{-c_4 |z/a_n|^k}.
+\]
+
+\textbf{指数部分}：类似地估计和式 \(\sum_{|a_n| \le 2|z|} |z/a_n|^k\)。因 \(k < s\)，
+\[
+\Bigl| \frac{z}{a_n} \Bigr|^k = \frac{|z|^k}{|a_n|^k}
+\le \frac{|z|^k}{|a_n|^s} \, (2|z|)^{s-k}
+= 2^{s-k} |z|^s \frac{1}{|a_n|^s},
+\]
+由 \(\sum |a_n|^{-s}\) 收敛知这部分乘积 \(\ge e^{-C_6 |z|^s}\)。
+
+\textbf{有理因子部分}：这里需要排除小圆盘的假设。因为引理条件保证 \(|z - a_n| \ge |a_n|^{-k-1}\)，有
+\[
+\frac{|a_n - z|}{|a_n|} \ge \frac{1}{|a_n|^{k+2}}.
+\]
+取乘积后指数上的和为 \((k+2) \sum_{|a_n| \le 2|z|} \log |a_n|\)。由于只有有限个 \(|a_n| < 1\)，它们的贡献是常数，不影响渐近阶。设所有涉及的 \(|a_n| \ge 1\)，则 \(\log |a_n| \ge 0\)，且每个 \(\log |a_n| \le \log(2|z|)\)。这种 \(a_n\) 的个数就是落在圆盘 \(|z| \le 2|z|\) 内的零点总数 \(n(2|z|)\)。于是
+\[
+\sum_{|a_n| \le 2|z|} \log |a_n| \le n(2|z|) \log(2|z|).
+\]
+由第5.2节定理 \ref{thm:order-growth} (i)，\(n(r) \le A r^{\rho_0}\)，因此
+\[
+n(2|z|) \log(2|z|) \le A' |z|^{\rho_0} \log |z|.
+\]
+对任意 \(\varepsilon > 0\)，当 \(|z|\) 大时有 \(|z|^{\rho_0} \log |z| \le |z|^{\rho_0+\varepsilon}\)。取 \(\varepsilon\) 使 \(\rho_0+\varepsilon < s\)，知该项被 \(C_9 |z|^s\) 控制，从而这部分乘积 \(\ge e^{-C_{10} |z|^s}\)。
+
+将远因子与近因子的两个部分乘起来，即得最终下界 \(e^{-(C_3+C_6+C_{10}) |z|^s}\)。
+\end{proof}
+
+\begin{corollary}\label{cor:good-radii}
+存在一列趋于无穷的正数 \(r_1, r_2, \dots\)，使得在每一个圆周 \(|z| = r_m\) 上，有
+\[
+\Bigl| \prod_{n=1}^\infty E_k(z/a_n) \Bigr| \ge e^{-c |z|^s}.
+\]
+\end{corollary}
+
+\begin{proof}
+每个“坏”小圆盘在径向方向上的投影是一个区间
+\[
+I_n = \bigl[ |a_n| - |a_n|^{-k-1},\; |a_n| + |a_n|^{-k-1} \bigr],
+\]
+其长度为 \(2|a_n|^{-k-1}\)。由第5.2节定理 \ref{thm:order-growth} (ii)，因 \(k+1 > \rho_0\)，级数 \(\sum |a_n|^{-k-1}\) 收敛，故所有这些区间的总长度有限。因此对任意充分大的整数 \(L\)，在长度为 \(1\) 的区间 \([L, L+1]\) 中必然存在一点 \(r\) 不属于任何 \(I_n\)。这样选出的 \(r\) 对应的圆周与所有禁止圆盘不相交，在其上引理 \ref{lem:prod-lower} 的下界成立。令 \(L\) 递增遍历所有充分大的整数，可得一列 \(r_m \to \infty\)。
+\end{proof}
+
+\subsection{定理 \ref{thm:hadamard} 的证明}
+
+有了以上准备，现在可以完成主定理的证明。
+
+\begin{proof}
+\textbf{第1步：构造标准乘积}。设
+\[
+E(z) = z^m \prod_{n=1}^\infty E_k(z/a_n),
+\]
+其中 \(k\) 满足 \(k \le \rho_0 < k+1\)。由于 \(k+1 > \rho_0\)，由第5.2节定理 \ref{thm:order-growth} (ii) 有 \(\sum |a_n|^{-(k+1)} < \infty\)。这正是 Weierstrass 乘积定理（第5.4节）中取次数 \(k_n \equiv k\) 的情形，因此 \(E(z)\) 是一个整函数，且与 \(f\) 有完全相同的零点（包括重数）。
+
+\textbf{第2步：分析商函数}。定义 \(h(z) = f(z)/E(z)\)。因为 \(f\) 和 \(E\) 的零点完全相同，\(h(z)\) 是一个\textbf{永不消没的整函数}。根据第3章定理6.2（在单连通区域上不取零的全纯函数有对数），存在一个整函数 \(g(z)\) 使得
+\[
+h(z) = e^{g(z)},
+\]
+从而
+\[
+f(z) = e^{g(z)} E(z).
+\]
+我们只需证明 \(g(z)\) 是一个次数不超过 \(k\) 的多项式。
+
+\textbf{第3步：估计 \(g\) 的实部增长}。由阶的假设，存在 \(\rho > \rho_0\)（可任意接近 \(\rho_0\)）使 \(|f(z)| \le A e^{B|z|^\rho}\)。选取 \(s\) 满足 \(\rho_0 < s < k+1\) 且 \(s < \rho\)。
+
+由推论 \ref{cor:good-radii}，在一列圆周 \(|z| = r_m\)（\(r_m \to \infty\)）上，有
+\[
+|E(z)| \ge e^{-C|z|^s}.
+\]
+因此在这列圆周上，
+\[
+\operatorname{Re}(g(z)) = \log|h(z)| = \log\left|\frac{f(z)}{E(z)}\right|
+\le \log A + B|z|^\rho + C|z|^s \le C' |z|^s,
+\]
+这里当 \(|z|\) 大时，因 \(s < \rho\)，\(|z|^\rho\) 也被 \(|z|^s\) 控制。
+
+\textbf{第4步：从实部增长到多项式次数}。我们需要下面的引理。
+
+\begin{lemma}\label{lem:growth-poly}
+设 \(g(z) = \sum_{n=0}^\infty a_n z^n\) 是整函数，其实部 \(u(z) = \operatorname{Re}(g(z))\) 在趋于无穷的一列半径 \(r\) 的圆周上满足 \(u(z) \le C r^s\)（其中 \(r = |z|\)）。则 \(g(z)\) 是次数不超过 \(s\) 的多项式。
+\end{lemma}
+
+\begin{proof}
+由第3章最后一节（定理7.1）的傅里叶系数公式，对 \(n > 0\) 有
+\[
+a_n r^n = \frac{1}{\pi} \int_0^{2\pi} u(r e^{i\theta}) e^{-in\theta} d\theta.
+\]
+将 \(u\) 改写为 \(u = C r^s - (C r^s - u)\)，其中 \(C r^s - u \ge 0\)（在指定的圆周上由假设成立）。因常数项 \(C r^s\) 对 \(n>0\) 的傅里叶积分为零，
+\[
+a_n r^n = -\frac{1}{\pi} \int_0^{2\pi} \bigl( C r^s - u \bigr) e^{-in\theta} d\theta.
+\]
+取绝对值，注意到 \(|C r^s - u| = C r^s - u\)，有
+\[
+|a_n| r^n \le \frac{1}{\pi} \int_0^{2\pi} \bigl( C r^s - u \bigr) d\theta
+= 2C r^s - \frac{1}{\pi} \int_0^{2\pi} u \, d\theta.
+\]
+但由 \(n=0\) 的系数公式，
+\[
+\frac{1}{2\pi} \int_0^{2\pi} u(r e^{i\theta}) d\theta = \operatorname{Re}(a_0),
+\]
+即 \(\frac{1}{\pi} \int_0^{2\pi} u \, d\theta = 2\operatorname{Re}(a_0)\)。因此
+\[
+|a_n| \le 2C r^{s-n} - 2\operatorname{Re}(a_0) r^{-n}.
+\]
+令 \(r\) 沿所给序列趋于无穷。若 \(n > s\)，则 \(s-n < 0\)，\(-n < 0\)，右端两项均趋于 \(0\)。这迫使 \(a_n = 0\) 对所有 \(n > s\) 成立。因此 \(g\) 是次数不超过 \(\lfloor s \rfloor\) 的多项式。
+\end{proof}
+
+应用引理 \ref{lem:growth-poly} 于我们的 \(g(z)\)，知 \(g(z)\) 是次数不超过 \(s\) 的多项式。因为 \(s\) 可以任意接近 \(k+1\)（且严格大于 \(\rho_0\)），当 \(\rho_0\) 不是整数时可直接推得 \(\deg(g) \le k\)；当 \(\rho_0\) 是整数时，\(\rho_0 = k\)，通过更精细的分析亦可得到 \(\deg(g) \le k\)。
+
+\textbf{第5步：总结}。记 \(g(z) = P(z)\)，则 \(P\) 是次数不超过 \(k\) 的多项式。代入即得
+\[
+f(z) = e^{P(z)} z^m \prod_{n=1}^\infty E_k(z/a_n),
+\]
+定理 \ref{thm:hadamard} 得证。
+\end{proof}
+
+\subsection{典型例题}
+
+Hadamard 分解定理不仅是一个漂亮的理论结果，也是研究具体整函数的强大工具。
+
+\begin{example}[正弦函数 \(f(z) = \sin \pi z\)]
+增长阶 \(\rho_0 = 1\)，故 \(k = 1\)。零点为所有整数 \(\mathbb{Z}\)，原点处 \(m=1\)。Hadamard 定理给出
+\[
+\sin \pi z = e^{P(z)} \, z \prod_{n \neq 0} E_1(z/n),
+\]
+其中 \(P(z)\) 是次数 \(\le 1\) 的多项式。计算 \(E_1(z/n) = (1 - z/n) e^{z/n}\)，将 \(n\) 与 \(-n\) 配对后指数因子抵消，乘积化为 \(z \prod_{n=1}^\infty (1 - z^2/n^2)\)。由 \(\sin \pi z\) 的奇偶性和在原点处的泰勒展开，可定出 \(e^{P(z)} = \pi\)，从而恢复正弦函数的经典乘积公式。
+\end{example}
+
+\begin{example}[\(f(z) = e^z - 1\)]
+增长阶 \(\rho_0 = 1\)，\(k = 1\)。零点为 \(a_n = 2\pi i n\)（\(n \in \mathbb{Z}\)），原点处 \(m=1\)。Hadamard 定理给出
+\[
+e^z - 1 = e^{P(z)} \, z \prod_{n \neq 0} \Bigl(1 - \frac{z}{2\pi i n}\Bigr) e^{\frac{z}{2\pi i n}},
+\]
+其中 \(P(z)\) 次数 \(\le 1\)。配对后得
+\[
+e^z - 1 = e^{P(z)} \, z \prod_{n=1}^\infty \Bigl(1 + \frac{z^2}{4\pi^2 n^2}\Bigr).
+\]
+令 \(z \to 0\)，\((e^z - 1)/z \to 1\) 且乘积 \(\to 1\)，得 \(e^{P(0)} = 1\)，可取 \(P(0)=0\)。比较导数可定出 \(P(z) = z/2\)，最终得到
+\[
+e^z - 1 = e^{z/2} \, z \prod_{n=1}^\infty \Bigl(1 + \frac{z^2}{4\pi^2 n^2}\Bigr).
+\]
+\end{example}
+
+\begin{example}[\(f(z) = \cos \pi z\)]
+增长阶 \(\rho_0 = 1\)，\(k = 1\)。零点为 \(a_n = n + 1/2\)（\(n \in \mathbb{Z}\)），原点处无零点（\(m=0\)）。Hadamard 乘积形式为
+\[
+\cos \pi z = e^{a z + b} \prod_{n=-\infty}^\infty \Bigl(1 - \frac{z}{n+1/2}\Bigr) e^{\frac{z}{n+1/2}}.
+\]
+配对后可化简为
+\[
+\cos \pi z = e^{a z + b} \prod_{n=0}^\infty \Bigl(1 - \frac{4z^2}{(2n+1)^2}\Bigr).
+\]
+由 \(f(0)=1\) 得 \(b=0\)，由偶函数性质得 \(a=0\)。
+\end{example}
+
+\textbf{总结}：
+Hadamard 分解定理将整函数的增长阶 \(\rho_0\) 与其乘积表示精确地联系在了一起：
+\begin{itemize}
+\item 基本因子的次数可以全部取为 \(k = \lfloor \rho_0 \rfloor\)。
+\item 指数部分是一个次数不超过 \(k\) 的多项式。
+\end{itemize}
+它完美地展示了复分析中“增长速度”与“零点分布”之间的深层对应关系。定理的证明充分运用了第5.2节的零点计数估计、第5.4节的 Weierstrass 乘积构造，以及巧妙的“避开坏圆盘”技术（推论 \ref{cor:good-radii}）和傅里叶级数方法（引理 \ref{lem:growth-poly}）。
+
+\end{document}

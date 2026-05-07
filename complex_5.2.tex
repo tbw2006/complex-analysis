@@ -1,0 +1,178 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：第5.2节 有限阶整函数}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}{例}[section]
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\section{有限阶整函数}
+
+整函数在无穷远处的行为可以非常不同。例如，多项式 \(P(z)\) 在无穷远处按 \(|z|^n\) 增长；指数函数 \(e^z\) 增长得更快；而 \(e^{e^z}\) 增长得极快。为了量化这种增长速度，我们引入“阶”的概念。
+
+\subsection{增长阶的定义}
+
+\begin{definition}
+设 \(f\) 为整函数。如果存在正数 \(\rho\) 和常数 \(A, B > 0\)，使得对于所有 \(z \in \CC\)，都有
+\begin{equation}
+|f(z)| \le A e^{B|z|^\rho},
+\end{equation}
+则称 \(f\) 具有\textbf{不超过 \(\rho\) 的增长阶}（has an order of growth \(\le \rho\)）。
+\end{definition}
+
+\begin{definition}
+整函数 \(f\) 的\textbf{增长阶}（order of growth）\(\rho_f\) 定义为所有满足上述条件的 \(\rho\) 的下确界，即
+\begin{equation}
+\rho_f = \inf \rho .
+\end{equation}
+\end{definition}
+
+\begin{remark}
+对于多项式 \(P(z) = a_n z^n + \dots + a_0\)，有 \(|P(z)| \le C |z|^n\)。对于任意 \(\varepsilon > 0\)，当 \(|z|\) 足够大时，\(|z|^n \le e^{|z|^{n+\varepsilon}}\)。因此多项式的阶为 \(0\)。对于 \(e^{z^k}\)，阶为 \(k\)。对于 \(e^{e^z}\)，其增长速度超过任何 \(e^{|z|^\rho}\)，因此阶为 \(\infty\)。
+\end{remark}
+
+\subsection{主要定理：零点计数与倒数和}
+
+下面的定理精确地阐述了“函数增长得越快，它能拥有的零点就越多”这一原理。
+
+\begin{theorem}\label{thm:order-growth}
+设 \(f\) 是一个整函数，其增长阶 \(\le \rho\)。那么：
+\begin{enumerate}
+\item 存在常数 \(C > 0\)，使得对于所有足够大的 \(r\) (\(r > 1\)即可)，有
+\begin{equation}
+n(r) \le C r^\rho,
+\end{equation}
+其中 \(n(r)\) 表示 \(f\) 在圆盘 \(|z| \le r\) 内的零点个数（计重数）。
+\item 设 \(z_1, z_2, \dots\) 为 \(f\) 的非零零点（按模从小到大排列），则对于任意 \(s > \rho\)，级数
+\begin{equation}
+\sum_{k=1}^\infty \frac{1}{|z_k|^s}
+\end{equation}
+收敛。
+\end{enumerate}
+\end{theorem}
+
+\textbf{意义：}
+\begin{itemize}
+\item 第 (i) 部分给出了零点密度的上界。函数的阶 \(\rho\) 限制了它在半径为 \(r\) 的圆内能拥有的零点数量（最多与 \(r^\rho\) 成正比）。
+\item 第 (ii) 部分是一个更强的结论。它不仅说明零点不能太密集，还给出了一个具体的可积性判据：零点的 \(s\) 次幂倒数和收敛，只要 \(s\) 严格大于阶 \(\rho\)。
+\end{itemize}
+
+\subsection{定理 \ref{thm:order-growth} 的证明}
+
+证明的核心工具是前一节的 Jensen 公式。我们先回顾其形式。
+
+\subsubsection{预备知识：Jensen 公式}
+
+如果 \(f(0) \neq 0\)，Jensen 公式的一个等价形式是：
+\begin{equation}\label{eq:jensen}
+\int_0^R n(r) \frac{dr}{r} = \frac{1}{2\pi} \int_0^{2\pi} \log |f(R e^{i\theta})| d\theta - \log |f(0)|.
+\end{equation}
+这个公式将“零点计数函数 \(n(r)\) 的积分平均”与“\(f\) 在圆周上的模的平均”联系了起来。
+
+\subsubsection{第 (i) 部分的证明}
+
+\begin{enumerate}
+\item \textbf{化简假设}：首先假设 \(f(0) \neq 0\)。如果 \(f\) 在原点有 \(\ell\) 阶零点，可以构造 \(F(z) = f(z)/z^\ell\)。\(F(z)\) 也是整函数，且阶不超过 \(\rho\)。\(F\) 和 \(f\) 的零点几乎相同（除了原点），且它们的零点计数函数 \(n_F(r)\) 和 \(n_f(r)\) 只相差常数 \(\ell\)，这不会影响渐近不等式 \(n(r) \le C r^\rho\)。因此不失一般性，设 \(f(0) \neq 0\)。
+
+\item \textbf{利用 Jensen 公式进行放缩}：
+取 \(R = 2r\)。由于 \(n(r)\) 是非减函数，积分区间 \([r, 2r]\) 上的积分满足
+\begin{equation}
+\int_r^{2r} n(x) \frac{dx}{x} \ge n(r) \int_r^{2r} \frac{dx}{x} = n(r) \log 2.
+\end{equation}
+
+另一方面，Jensen 公式 \eqref{eq:jensen} 的右端（取 \(R=2r\)）为
+\begin{equation}
+\frac{1}{2\pi} \int_0^{2\pi} \log |f(2r e^{i\theta})| d\theta - \log |f(0)|.
+\end{equation}
+
+利用函数阶的定义 \(|f(z)| \le A e^{B|z|^\rho}\)，我们有 \(\log |f(2r e^{i\theta})| \le \log A + B(2r)^\rho\)。因此
+\begin{equation}
+\frac{1}{2\pi} \int_0^{2\pi} \log |f(2r e^{i\theta})| d\theta \le \log A + B 2^\rho r^\rho \le C' r^\rho \quad (\text{对于足够大的 } r).
+\end{equation}
+
+将这个上界代入 Jensen 公式右端，得到
+\begin{equation}
+n(r) \log 2 \le C' r^\rho - \log |f(0)|.
+\end{equation}
+对于足够大的 \(r\)，\(- \log |f(0)|\) 可以并入 \(C' r^\rho\) 项，只需取一个稍大的常数 \(C\)。从而得到 \(n(r) \le C r^\rho\)。
+\end{enumerate}
+
+\subsubsection{第 (ii) 部分的证明}
+
+我们想证明 \(\sum |z_k|^{-s} < \infty\) 对于任意 \(s > \rho\) 成立。
+
+\begin{enumerate}
+\item \textbf{分解求和}：将求和按 \(|z_k|\) 的大小分组。对于 \(j = 0, 1, 2, \dots\)，考虑位于圆环 \(2^j \le |z_k| < 2^{j+1}\) 内的零点。在这个环内，每个零点都满足 \(|z_k|^{-s} \le (2^j)^{-s} = 2^{-js}\)。
+
+\item \textbf{用 \(n(r)\) 控制每一组的零点数量}：
+位于圆环 \(2^j \le |z_k| < 2^{j+1}\) 内的零点个数不超过落在圆盘 \(|z| \le 2^{j+1}\) 内的总零点数，即 \(n(2^{j+1})\)。
+
+\item \textbf{组合估计并利用第 (i) 部分的结论}：
+\begin{align}
+\sum_{|z_k| \ge 1} |z_k|^{-s} 
+&= \sum_{j=0}^\infty \Bigl( \sum_{2^j \le |z_k| < 2^{j+1}} |z_k|^{-s} \Bigr) \nonumber\\
+&\le \sum_{j=0}^\infty 2^{-js} \cdot n(2^{j+1}).
+\end{align}
+现在利用第 (i) 部分的结果：对于足够大的 \(r\)，有 \(n(r) \le C r^\rho\)。因此对于足够大的 \(j\)，\(n(2^{j+1}) \le C (2^{j+1})^\rho = C 2^\rho 2^{j\rho}\)。
+
+\item \textbf{分析级数的收敛性}：
+\begin{equation}
+\sum_{j=0}^\infty 2^{-js} n(2^{j+1}) \le C' \sum_{j=0}^\infty 2^{-js} \cdot 2^{j\rho} = C' \sum_{j=0}^\infty (2^{\rho-s})^j.
+\end{equation}
+这是一个公比为 \(2^{\rho-s}\) 的等比级数。因为 \(s > \rho\)，所以 \(\rho - s < 0\)，从而 \(2^{\rho-s} < 1\)。因此该等比级数收敛。
+
+\(\sum_{|z_k| < 1}\) 的部分只有有限项（因为零点不能聚集在有限平面内），自然收敛。因此整个级数 \(\sum_{k=1}^\infty |z_k|^{-s}\) 收敛。
+\end{enumerate}
+
+\subsection{典型例题}
+
+书中给出了两个非常经典的例子，用以说明定理的条件是“尖锐的”（即 \(s > \rho\) 的条件不能放松到 \(s = \rho\)）。
+
+\begin{example}
+考虑整函数 \(f(z) = \sin \pi z\)。
+
+\textbf{求增长阶}：利用欧拉公式 \(\sin \pi z = \frac{e^{i\pi z} - e^{-i\pi z}}{2i}\)，我们有
+\begin{equation}
+|\sin \pi z| \le \frac{1}{2} (e^{\pi |z|} + e^{\pi |z|}) = e^{\pi |z|}.
+\end{equation}
+这符合 \(A e^{B|z|^\rho}\) 的形式，其中 \(\rho = 1\)。因此 \(\sin \pi z\) 的增长阶 \(\rho \le 1\)。（实际上取 \(z = ix, x \in \RR\) 时，\(|\sin(i\pi x)| = \frac{e^{\pi x} - e^{-\pi x}}{2} \sim \frac{1}{2} e^{\pi |x|}\)，因此阶恰好为 \(1\)。）
+
+\textbf{验证定理 \ref{thm:order-growth} (ii)}：\(f(z) = \sin \pi z\) 的零点为所有整数 \(z_n = n \ (n \in \mathbb{Z})\)。非零零点的倒数和为
+\begin{equation}
+\sum_{n \neq 0} \frac{1}{|n|^s}.
+\end{equation}
+我们知道，这个级数收敛当且仅当 \(s > 1\)。这里函数的阶 \(\rho = 1\)。定理要求 \(s > \rho\)，即 \(s > 1\)，与级数的收敛域完全吻合。这完美地展示了条件的精确性。
+\end{example}
+
+\begin{example}
+考虑整函数 \(f(z) = \cos z^{1/2}\)。
+
+\textbf{求增长阶}：这个函数是通过幂级数定义的：\(\cos z^{1/2} = \sum_{n=0}^\infty (-1)^n \frac{z^n}{(2n)!}\)。当 \(|z|\) 很大时，它可以被 \(e^{|z|^{1/2}}\) 控制，因此其增长阶 \(\rho = 1/2\)。
+
+\textbf{验证定理 \ref{thm:order-growth} (ii)}：它的零点为 \(z_n = ((n + 1/2)\pi)^2 \ (n \in \mathbb{Z})\)。非零零点的倒数和为
+\begin{equation}
+\sum \frac{1}{|z_n|^s} = \sum \frac{1}{((n+1/2)\pi)^{2s}}.
+\end{equation}
+这个级数收敛当且仅当 \(2s > 1\)，即 \(s > 1/2\)。这里函数的阶 \(\rho = 1/2\)。定理要求 \(s > \rho = 1/2\)，再次与级数收敛条件完全一致。
+\end{example}
+
+这两个例子生动地说明了：\textbf{一个整函数的阶 \(\rho\) 精确地刻画了其零点分布的“稀疏”程度。零点序列的 \(s\) 次幂倒数和收敛的临界指数 \(s\) 正好就是该函数的阶。}
+
+\end{document}
