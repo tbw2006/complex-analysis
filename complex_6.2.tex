@@ -1,0 +1,271 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：第6.2节 Zeta 函数}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}{例}[section]
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+本节系统研究 Riemann Zeta 函数 $\zeta(s)$ 的定义、解析延拓、函数方程以及在临界直线附近的增长估计。核心手法是通过 Theta 函数 $\vartheta$ 和 $\xi$ 函数建立积分表示，从而将原本只定义在半平面 $\operatorname{Re}(s)>1$ 的 $\zeta(s)$ 延拓为整个复平面上的亚纯函数，并揭示其关于直线 $\operatorname{Re}(s)=1/2$ 的对称性。
+
+% ========== 2.1 ==========
+\section{定义与半平面内的解析性}
+
+\begin{definition}
+对 $\operatorname{Re}(s)>1$，Riemann Zeta 函数由绝对收敛的 Dirichlet 级数定义：
+\begin{equation}\label{eq:ZetaDef}
+\zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^{s}}.
+\end{equation}
+\end{definition}
+
+\begin{proposition}[半平面内的全纯性]\label{prop:ZetaHalfPlane}
+级数 $\sum_{n=1}^{\infty} n^{-s}$ 在 $\operatorname{Re}(s)>1$ 时收敛，且 $\zeta(s)$ 在此半平面内全纯。
+\end{proposition}
+
+\begin{proof}
+记 $s=\sigma+it$，则 $|n^{-s}| = n^{-\sigma}$。对任意 $\delta>0$，当 $\sigma\ge 1+\delta$ 时，级数被 $\sum n^{-(1+\delta)}$ 控制，后者收敛，故级数在每一个半平面 $\operatorname{Re}(s)\ge 1+\delta$ 上一致收敛。由于每一项 $n^{-s}$ 是全纯函数，一致收敛保持全纯性，故 $\zeta(s)$ 在 $\operatorname{Re}(s)>1$ 内全纯。
+\end{proof}
+
+% ========== 2.2 ==========
+\section{Theta 函数与积分表示}
+
+为了将 $\zeta(s)$ 延拓到整个复平面，需要引入 Theta 函数作为桥梁。
+
+\begin{definition}
+对 $t>0$，定义 Theta 函数
+\begin{equation}\label{eq:ThetaDef}
+\vartheta(t) = \sum_{n=-\infty}^{\infty} e^{-\pi n^{2} t}.
+\end{equation}
+\end{definition}
+
+由 Poisson 求和公式（第4章定理2.4），$\vartheta(t)$ 满足以下函数方程：
+\begin{equation}\label{eq:ThetaFuncEq}
+\vartheta(t) = t^{-1/2} \vartheta(1/t), \qquad t>0.
+\end{equation}
+由此可得 $\vartheta(t)$ 在 $t\to0$ 和 $t\to\infty$ 时的渐近行为：
+\begin{itemize}
+\item 当 $t\to0$ 时，$\vartheta(t) \le C t^{-1/2}$；
+\item 当 $t\to\infty$ 时，$|\vartheta(t)-1| \le C e^{-\pi t}$（除 $n=0$ 项外，其余项指数衰减）。
+\end{itemize}
+
+\begin{theorem}[联系 $\zeta$ 与 $\vartheta$ 的积分公式]\label{thm:ZetaThetaIntegral}
+若 $\operatorname{Re}(s)>1$，则
+\begin{equation}\label{eq:ZetaIntegral}
+\pi^{-s/2} \Gamma\!\left(\frac{s}{2}\right) \zeta(s)
+= \frac{1}{2} \int_{0}^{\infty} u^{s/2 - 1} \bigl[\vartheta(u) - 1\bigr] \, du.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+利用 Gamma 函数的积分定义 $\Gamma(s/2) = \int_{0}^{\infty} e^{-t} t^{s/2 - 1}\, dt$。作变量代换 $t = \pi n^{2} u$，得
+\[
+\pi^{-s/2} \Gamma(s/2) n^{-s} = \int_{0}^{\infty} e^{-\pi n^{2} u} u^{s/2 - 1}\, du.
+\]
+对 $n\ge 1$ 求和，并注意到 $\sum_{n=1}^{\infty} e^{-\pi n^{2} u} = \frac{1}{2}(\vartheta(u)-1)$。由 $\vartheta$ 的渐近性质，求和与积分可交换次序，于是
+\[
+\pi^{-s/2} \Gamma(s/2) \sum_{n=1}^{\infty} n^{-s}
+= \int_{0}^{\infty} \frac{1}{2} (\vartheta(u)-1) u^{s/2 - 1}\, du,
+\]
+此即所需公式。
+\end{proof}
+
+% ========== 2.3 ==========
+\section{$\xi$ 函数与函数方程}
+
+为揭示对称性，定义 $\xi$ 函数。
+
+\begin{definition}
+对 $\operatorname{Re}(s)>1$，定义
+\begin{equation}\label{eq:XiDef}
+\xi(s) = \pi^{-s/2} \Gamma\!\left(\frac{s}{2}\right) \zeta(s).
+\end{equation}
+\end{definition}
+
+由定理 \ref{thm:ZetaThetaIntegral}，有
+\[
+\xi(s) = \frac{1}{2} \int_{0}^{\infty} u^{s/2 - 1} \bigl[\vartheta(u) - 1\bigr] \, du, \qquad \operatorname{Re}(s)>1.
+\]
+
+将积分拆为 $\int_{0}^{1} + \int_{1}^{\infty}$。
+\begin{itemize}
+\item 第二部分 $\int_{1}^{\infty}$ 中的被积函数指数衰减，故该积分对所有 $s\in\CC$ 收敛，且是整函数。
+\item 第一部分 $\int_{0}^{1}$ 利用 $\vartheta$ 的函数方程 $\vartheta(u) = u^{-1/2} \vartheta(1/u)$ 进行变换：
+\begin{align*}
+\int_{0}^{1} u^{s/2 - 1} \bigl[\vartheta(u)-1\bigr] \, du
+&= \int_{0}^{1} u^{s/2 - 1} \bigl[u^{-1/2} \vartheta(1/u) - 1\bigr] \, du \\
+&= \int_{0}^{1} u^{s/2 - 3/2} \vartheta(1/u) \, du - \int_{0}^{1} u^{s/2 - 1} \, du.
+\end{align*}
+对第一项作代换 $u \mapsto 1/u$，化为 $\int_{1}^{\infty} u^{(1-s)/2 - 1} \vartheta(u) \, du$；第二项直接积出为 $\frac{2}{s}$。
+\end{itemize}
+
+综合上述，得到对所有 $s\in\CC$ 成立的表达式：
+\begin{equation}\label{eq:XiFull}
+\xi(s) = \frac{1}{s(s-1)} + \frac{1}{2} \int_{1}^{\infty}
+\bigl[ u^{s/2 - 1} + u^{(1-s)/2 - 1} \bigr] \bigl(\vartheta(u)-1\bigr) \, du.
+\end{equation}
+
+\begin{theorem}[$\xi$ 函数的亚纯延拓与函数方程]\label{thm:XiCont}
+$\xi(s)$ 可亚纯延拓到整个复平面，仅有两个单极点 $s=0$ 和 $s=1$，且满足函数方程
+\[
+\xi(s) = \xi(1-s), \qquad \forall s\in\CC.
+\]
+\end{theorem}
+
+\begin{proof}
+式 \eqref{eq:XiFull} 右边的积分部分关于 $s$ 对称且被积函数指数衰减，故为整函数；而 $\frac{1}{s(s-1)}$ 仅在 $s=0,1$ 有单极点。因此 $\xi(s)$ 是亚纯函数，极点只在这两处。对称性由表达式中 $s$ 与 $1-s$ 的对称性立得。
+\end{proof}
+
+% ========== 2.4 ==========
+\section{$\zeta(s)$ 的解析延拓与函数方程}
+
+从 $\xi$ 的定义反解出 $\zeta$：
+\[
+\zeta(s) = \pi^{s/2} \frac{\xi(s)}{\Gamma(s/2)}.
+\]
+
+\begin{theorem}[$\zeta(s)$ 的解析延拓]\label{thm:ZetaCont}
+$\zeta(s)$ 可亚纯延拓到整个复平面，唯一奇点是 $s=1$ 的单极点。且满足函数方程
+\begin{equation}\label{eq:ZetaFuncEq}
+\pi^{-s/2} \Gamma\!\left(\frac{s}{2}\right) \zeta(s)
+= \pi^{-(1-s)/2} \Gamma\!\left(\frac{1-s}{2}\right) \zeta(1-s).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+已知 $\xi(s)$ 仅在 $s=0,1$ 有单极点，而 $1/\Gamma(s/2)$ 是整函数，在 $s=0,-2,-4,\dots$ 有单零点。
+\begin{itemize}
+\item $s=1$：$\xi(1)$ 有单极点，$\Gamma(1/2)\neq0$，故 $\zeta(s)$ 在 $s=1$ 有单极点。
+\item $s=0$：$\xi(0)$ 的单极点被 $1/\Gamma(0)$ 的零点抵消，$\zeta(0)$ 为可去奇点。
+\item 其余点全纯。
+\end{itemize}
+函数方程由 $\xi(s)=\xi(1-s)$ 和 $\xi$ 的定义直接得到。
+\end{proof}
+
+% ========== 2.5 ==========
+\section{初等延拓到 $\operatorname{Re}(s)>0$}
+
+下面给出一种不依赖 Theta 函数的初等延拓方法，它在下章估计 $\zeta$ 在 $\operatorname{Re}(s)=1$ 附近的增长时非常重要。
+
+\begin{proposition}[级数与积分的比较]\label{prop:Delta}
+存在一列整函数 $\{\delta_n(s)\}_{n=1}^{\infty}$，满足
+\[
+|\delta_n(s)| \le \frac{|s|}{n^{\sigma+1}}, \qquad s=\sigma+it,
+\]
+使得对任意整数 $N>1$ 成立
+\begin{equation}\label{eq:DeltaId}
+\sum_{1\le n < N} \frac{1}{n^{s}} - \int_{1}^{N} \frac{dx}{x^{s}}
+= \sum_{1\le n < N} \delta_n(s).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+令 $\delta_n(s) = \int_{n}^{n+1} \bigl( \frac{1}{n^{s}} - \frac{1}{x^{s}} \bigr) dx$。对 $f(x)=x^{-s}$ 在 $[n,x]$ 上用微分中值定理，存在 $\xi\in(n,x)$ 使得
+\[
+\left|\frac{1}{n^{s}} - \frac{1}{x^{s}}\right|
+= |f'(\xi)|\,|x-n|
+= \frac{|s|}{\xi^{\sigma+1}} |x-n|
+\le \frac{|s|}{n^{\sigma+1}}.
+\]
+积分后得 $|\delta_n(s)|\le |s|/n^{\sigma+1}$。将积分拆分为 $\sum \int_{n}^{n+1}$ 即得恒等式。
+\end{proof}
+
+\begin{corollary}[延拓到右半平面]\label{cor:ZetaHalf}
+对于 $\operatorname{Re}(s)>0$，有
+\[
+\zeta(s) = \frac{1}{s-1} + H(s),
+\]
+其中 $H(s) = \sum_{n=1}^{\infty} \delta_n(s)$ 在 $\operatorname{Re}(s)>0$ 内全纯。因此 $\zeta(s)$ 可亚纯延拓到 $\operatorname{Re}(s)>0$，仅以 $s=1$ 为单极点。
+\end{corollary}
+
+\begin{proof}
+当 $\operatorname{Re}(s)>1$ 时，在 \eqref{eq:DeltaId} 中令 $N\to\infty$。
+\begin{itemize}
+\item 级数部分趋于 $\zeta(s)$。
+\item 积分部分 $\int_{1}^{N} x^{-s}dx = \frac{1-N^{1-s}}{s-1} \to \frac{1}{s-1}$（因 $\operatorname{Re}(s)>1$）。
+\item 右端级数由估计 $|\delta_n(s)|\le |s|/n^{\sigma+1}$ 知在任意半平面 $\operatorname{Re}(s)\ge\delta>0$ 的紧子集上一致收敛，故 $H(s)$ 在 $\operatorname{Re}(s)>0$ 内全纯。
+\end{itemize}
+因此等式 $\zeta(s) = \frac{1}{s-1} + H(s)$ 在 $\operatorname{Re}(s)>1$ 上成立，而右边在 $\operatorname{Re}(s)>0$ 上（除 $s=1$）全纯，这就给出了 $\zeta(s)$ 的解析延拓。
+\end{proof}
+
+% ========== 2.6 ==========
+\section{靠近 $\operatorname{Re}(s)=1$ 的增长估计}
+
+素数定理的证明需要了解 $\zeta(s)$ 在直线 $\operatorname{Re}(s)=1$ 附近的增长。
+
+\begin{proposition}[边界增长估计]\label{prop:ZetaGrowth}
+记 $s=\sigma+it$。
+\begin{enumerate}
+\item 对每个 $\sigma_0\in[0,1]$ 和任意 $\varepsilon>0$，存在 $c_\varepsilon>0$，使得当 $\sigma\ge\sigma_0$ 且 $|t|\ge1$ 时，
+\[
+|\zeta(s)| \le c_\varepsilon |t|^{1-\sigma_0+\varepsilon}.
+\]
+\item 当 $\sigma\ge1$ 且 $|t|\ge1$ 时，
+\[
+|\zeta'(s)| \le c_\varepsilon |t|^{\varepsilon}.
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\textbf{(i)} 由推论 \ref{cor:ZetaHalf}，
+\[
+|\zeta(s)| \le \frac{1}{|s-1|} + \sum_{n=1}^{\infty} |\delta_n(s)|.
+\]
+对 $\delta_n(s)$，已有两个估计：$|\delta_n(s)|\le 2/n^{\sigma}$ 和 $|\delta_n(s)|\le |s|/n^{\sigma+1}$。将两者插值：对 $0\le\delta\le1$，
+\[
+|\delta_n(s)| \le \left(\frac{2}{n^{\sigma}}\right)^{1-\delta}
+\left(\frac{|s|}{n^{\sigma+1}}\right)^{\delta}
+\le \frac{2|s|^{\delta}}{n^{\sigma+\delta}}.
+\]
+取 $\delta = 1-\sigma_0+\varepsilon$，并设 $\sigma\ge\sigma_0$，则
+\[
+|\delta_n(s)| \le \frac{2|s|^{1-\sigma_0+\varepsilon}}{n^{1+\varepsilon}}.
+\]
+于是
+\[
+|H(s)| \le \sum_{n=1}^{\infty} |\delta_n(s)|
+\le 2|s|^{1-\sigma_0+\varepsilon} \sum_{n=1}^{\infty} \frac{1}{n^{1+\varepsilon}}
+= K_\varepsilon |s|^{1-\sigma_0+\varepsilon}.
+\]
+其中 $K_\varepsilon = 2\sum n^{-(1+\varepsilon)}<\infty$。
+
+现在需将 $|s|^{1-\sigma_0+\varepsilon}$ 替换为 $|t|^{1-\sigma_0+\varepsilon}$。分两种情况：
+\begin{itemize}
+\item 若 $\sigma \le |t|$，则 $|s| = \sqrt{\sigma^2+t^2} \le \sqrt{2}|t|$，从而 $|s|^{1-\sigma_0+\varepsilon} \le C |t|^{1-\sigma_0+\varepsilon}$。
+\item 若 $\sigma > |t|$，则 $\sigma$ 很大。此时直接用级数定义可知 $\zeta(s)$ 有界：$|\zeta(s)| \le \sum n^{-\sigma} \le M_{\sigma_0}$，且 $M_{\sigma_0} \le M_{\sigma_0} |t|^{1-\sigma_0+\varepsilon}$（因 $|t|\ge1$ 且指数非负）。
+\end{itemize}
+综合两种情况即得 (i)。
+
+\textbf{(ii)} 对给定的 $\varepsilon>0$，取 $r = \varepsilon/2$，$\sigma_0 = 1-\varepsilon/2$。由 Cauchy 积分公式，
+\[
+\zeta'(s) = \frac{1}{2\pi i} \int_{|z-s|=r} \frac{\zeta(z)}{(z-s)^2}\, dz,
+\]
+故
+\[
+|\zeta'(s)| \le \frac{1}{r} \max_{|z-s|=r} |\zeta(z)|.
+\]
+圆周上的点 $z$ 满足 $\operatorname{Re}(z) \ge \sigma - r \ge 1 - \varepsilon/2 = \sigma_0$，且 $|\operatorname{Im}(z)| \ge |t| - r \ge |t|/2$（当 $|t|$ 充分大）。由 (i) 取 $\varepsilon/2$ 得 $|\zeta(z)| \le C' |\operatorname{Im}(z)|^{\varepsilon} \le C'' |t|^{\varepsilon}$。代入即得
+\[
+|\zeta'(s)| \le \frac{2}{\varepsilon} C'' |t|^{\varepsilon}.
+\]
+\end{proof}
+
+\end{document}

@@ -1,0 +1,135 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：Theta 函数的函数方程}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\begin{document}
+
+\maketitle
+
+本节从 Schwartz 空间（速降空间）中傅里叶变换的基本性质出发，严格证明泊松求和公式，并由此推出 Theta 函数所满足的函数方程 \(\vartheta(t) = t^{-1/2}\vartheta(1/t)\)。这一方程是第 6 章 Zeta 函数解析延拓的关键工具。
+
+% ========== 1 ==========
+\section{速降空间与傅里叶变换}
+
+\begin{definition}[Schwartz 空间]
+Schwartz 空间 \(\mathcal{S}(\RR)\) 是所有光滑函数 \(f:\RR\to\CC\) 的集合，满足对任意非负整数 \(\alpha,\beta\)，
+\begin{equation}\label{eq:Schwartz}
+\sup_{x\in\RR} |x|^\alpha |f^{(\beta)}(x)| < \infty .
+\end{equation}
+即函数及其各阶导数在无穷远处比任何多项式的倒数衰减得都快。
+\end{definition}
+
+\(\mathcal{S}(\RR)\) 是线性空间，且在逐点乘法、微分、傅里叶变换下封闭。傅里叶变换定义为
+\begin{equation}
+\hat{f}(\xi) = \int_{-\infty}^{\infty} f(x) e^{-2\pi i x\xi}\,dx ,\qquad \xi\in\RR .
+\end{equation}
+若 \(f\in\mathcal{S}(\RR)\)，则 \(\hat{f}\in\mathcal{S}(\RR)\)，且傅里叶反演公式成立：
+\begin{equation}
+f(x) = \int_{-\infty}^{\infty} \hat{f}(\xi) e^{2\pi i x\xi}\,d\xi ,\qquad x\in\RR .
+\end{equation}
+这一性质是证明泊松求和公式的核心。
+
+% ========== 2 ==========
+\section{泊松求和公式}
+
+\begin{theorem}[泊松求和公式]\label{thm:Poisson}
+设 \(f\in\mathcal{S}(\RR)\)，则
+\begin{equation}\label{eq:Poisson}
+\sum_{n=-\infty}^{\infty} f(n) = \sum_{n=-\infty}^{\infty} \hat{f}(n).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由于 \(f\) 速降，级数 \(\sum_{n\in\ZZ} f(x+n)\) 在 \(\RR\) 上绝对且局部一致收敛，因此定义了周期为 \(1\) 的光滑函数
+\[
+F(x) = \sum_{n=-\infty}^{\infty} f(x+n).
+\]
+将周期函数 \(F\) 展开为傅里叶级数：
+\[
+F(x) = \sum_{k=-\infty}^{\infty} c_k e^{2\pi i k x},
+\]
+其中傅里叶系数
+\[
+c_k = \int_0^1 F(x) e^{-2\pi i k x}\,dx .
+\]
+将 \(F\) 的级数表示代入并交换积分与求和（由一致收敛保证）：
+\begin{align*}
+c_k &= \int_0^1 \sum_{n=-\infty}^{\infty} f(x+n) e^{-2\pi i k x}\,dx \\
+&= \sum_{n=-\infty}^{\infty} \int_0^1 f(x+n) e^{-2\pi i k x}\,dx .
+\end{align*}
+对每个积分作变量代换 \(y = x+n\)，则
+\[
+\int_0^1 f(x+n) e^{-2\pi i k x}\,dx = \int_n^{n+1} f(y) e^{-2\pi i k (y-n)}\,dy = \int_n^{n+1} f(y) e^{-2\pi i k y}\,dy ,
+\]
+因为 \(e^{2\pi i k n}=1\)。将各区间上的积分求和，得到整个实轴上的积分：
+\[
+c_k = \int_{-\infty}^{\infty} f(y) e^{-2\pi i k y}\,dy = \hat{f}(k).
+\]
+因此
+\[
+F(x) = \sum_{k=-\infty}^{\infty} \hat{f}(k) e^{2\pi i k x}.
+\]
+特别地，取 \(x=0\)，即得
+\[
+\sum_{n=-\infty}^{\infty} f(n) = F(0) = \sum_{k=-\infty}^{\infty} \hat{f}(k),
+\]
+这就是泊松求和公式。
+\end{proof}
+
+% ========== 3 ==========
+\section{Theta 函数的函数方程}
+
+现在将泊松求和公式应用于特殊的高斯函数 \(f(x) = e^{-\pi t x^2}\)，其中 \(t>0\) 为固定参数。
+
+\subsection*{高斯函数的傅里叶变换}
+
+熟知对任意 \(a>0\)，
+\[
+\int_{-\infty}^{\infty} e^{-\pi a x^2} e^{-2\pi i x\xi}\,dx = \frac{1}{\sqrt{a}} e^{-\pi \xi^2 / a}.
+\]
+取 \(a = t\)，则 \(f(x) = e^{-\pi t x^2}\) 的傅里叶变换为
+\begin{equation}\label{eq:GaussFT}
+\hat{f}(\xi) = \frac{1}{\sqrt{t}} e^{-\pi \xi^2 / t}.
+\end{equation}
+
+\subsection*{应用泊松求和}
+
+显然 \(f\in\mathcal{S}(\RR)\)。由定理 \ref{thm:Poisson}，
+\[
+\sum_{n=-\infty}^{\infty} f(n) = \sum_{n=-\infty}^{\infty} \hat{f}(n).
+\]
+左边是 \(\sum_{n=-\infty}^{\infty} e^{-\pi t n^2}\)，右边代入 \eqref{eq:GaussFT} 得 \(\sum_{n=-\infty}^{\infty} \frac{1}{\sqrt{t}} e^{-\pi n^2 / t}\)。因此
+\[
+\sum_{n=-\infty}^{\infty} e^{-\pi t n^2} = \frac{1}{\sqrt{t}} \sum_{n=-\infty}^{\infty} e^{-\pi n^2 / t}.
+\]
+
+\subsection*{Theta 函数表示}
+
+定义 Theta 函数（本书第 6 章所用形式）为
+\[
+\vartheta(t) = \sum_{n=-\infty}^{\infty} e^{-\pi n^2 t}, \qquad t>0.
+\]
+则上面的恒等式正是
+\begin{equation}\label{eq:ThetaFuncEq}
+\boxed{\vartheta(t) = t^{-1/2} \vartheta(1/t)} .
+\end{equation}
+这就是 Theta 函数所满足的函数方程，它是 Riemann Zeta 函数解析延拓的出发点。
+
+\end{document}

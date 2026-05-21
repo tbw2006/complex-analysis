@@ -1,0 +1,220 @@
+\documentclass[UTF8]{ctexart}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+
+\title{复变函数学习笔记：第6.1节 Gamma 函数}
+\author{}
+\date{}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{example}{例}[section]
+\newtheorem{remark}{注记}[section]
+\numberwithin{equation}{section}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+本节系统研究 Gamma 函数 \(\Gamma(s)\) 的定义、解析延拓、互补公式、增长阶以及无穷乘积表示。Gamma 函数是最重要的非初等函数之一，它自然地出现在许多分析计算中，其倒数 \(1/\Gamma(s)\) 是以非正整数为零点的“最简”整函数。
+
+% ========== 1.1 ==========
+\section{定义与半平面解析性}
+
+对于 \(\operatorname{Re}(s)>0\)，Gamma 函数由反常积分定义：
+\begin{equation}\label{eq:GammaDef}
+\Gamma(s) = \int_{0}^{\infty} e^{-t} t^{s-1}\, dt,
+\end{equation}
+其中 \(t^{s-1}=e^{(s-1)\log t}\) 取实数对数的主支。
+
+\begin{theorem}[半平面解析性]\label{thm:GammaHalfPlane}
+\(\Gamma(s)\) 在右半平面 \(\operatorname{Re}(s)>0\) 上全纯，且仍由 \eqref{eq:GammaDef} 给出。
+\end{theorem}
+
+\begin{proof}
+分三步完成。
+
+\textbf{1. 收敛性。} 设 \(s=\sigma+it\)，\(\sigma>0\)。注意到 \(|e^{-t}t^{s-1}|=e^{-t}t^{\sigma-1}\)。在 \(t\to0^{+}\) 处，\(t^{\sigma-1}\) 可积（因 \(\sigma>0\)）；在 \(t\to\infty\) 处，指数衰减 \(e^{-t}\) 压制任意幂次增长。故反常积分绝对收敛，\(\Gamma(s)\) 有定义。
+
+\textbf{2. 构造全纯的截断函数列。} 对每个 \(\varepsilon>0\)，令
+\[
+F_{\varepsilon}(s)=\int_{\varepsilon}^{1/\varepsilon} e^{-t} t^{s-1}\, dt,\qquad s\in\CC.
+\]
+被积函数关于 \(s\) 全纯，且关于 \((s,t)\) 联合连续，故每个 \(F_{\varepsilon}\) 是整函数。
+
+\textbf{3. 在竖带上一致收敛。} 任取正数 \(0<\delta<M<\infty\)，考虑竖带
+\[
+S_{\delta,M}=\{s\in\CC:\delta<\operatorname{Re}(s)<M\}.
+\]
+记 \(\sigma=\operatorname{Re}(s)\)，对 \(s\in S_{\delta,M}\) 有：
+\[
+\begin{aligned}
+|\Gamma(s)-F_{\varepsilon}(s)|
+&\le \int_{0}^{\varepsilon} e^{-t}t^{\sigma-1}\, dt + \int_{1/\varepsilon}^{\infty} e^{-t}t^{\sigma-1}\, dt\\
+&\le \int_{0}^{\varepsilon} t^{\delta-1}\, dt + C\int_{1/\varepsilon}^{\infty} e^{-t/2}\, dt\\
+&= \frac{\varepsilon^{\delta}}{\delta} + 2C e^{-1/(2\varepsilon)}.
+\end{aligned}
+\]
+右端与 \(s\) 无关且当 \(\varepsilon\to0\) 时趋于 0，故 \(F_{\varepsilon}\to\Gamma\) 在 \(S_{\delta,M}\) 上一致。一致收敛的全纯函数列极限仍全纯，因此 \(\Gamma(s)\) 在 \(S_{\delta,M}\) 上全纯。由 \(\delta,M\) 的任意性，\(\Gamma(s)\) 在整个右半平面全纯。
+\end{proof}
+
+% ========== 1.2 ==========
+\section{解析延拓到整个复平面}
+
+利用分部积分可得 Gamma 函数的基本函数方程。
+
+\begin{lemma}[函数方程]\label{lem:FuncEq}
+若 \(\operatorname{Re}(s)>0\)，则
+\[
+\Gamma(s+1)=s\Gamma(s).
+\]
+特别地，\(\Gamma(n+1)=n!\) 对 \(n=0,1,2,\dots\) 成立。
+\end{lemma}
+
+\begin{proof}
+对截断积分用微积分基本定理：
+\[
+\int_{\varepsilon}^{1/\varepsilon} \frac{d}{dt}\bigl(e^{-t}t^{s}\bigr)\, dt
+= -\int_{\varepsilon}^{1/\varepsilon} e^{-t}t^{s}\, dt + s\int_{\varepsilon}^{1/\varepsilon} e^{-t}t^{s-1}\, dt.
+\]
+左边 \(=e^{-1/\varepsilon}(1/\varepsilon)^{s}-e^{-\varepsilon}\varepsilon^{s}\to0\) 当 \(\varepsilon\to0\)。取极限即得 \(\Gamma(s+1)=s\Gamma(s)\)。由 \(\Gamma(1)=\int_{0}^{\infty}e^{-t}dt=1\) 递推得 \(\Gamma(n+1)=n!\)。
+\end{proof}
+
+借助函数方程，可将 \(\Gamma(s)\) 逐步向左半平面延拓。
+
+\begin{theorem}[解析延拓]\label{thm:GammaCont}
+\(\Gamma(s)\) 可解析延拓为整个 \(\CC\) 上的亚纯函数，唯一奇点是单极点 \(s=0,-1,-2,\dots\)。在 \(s=-n\) 处的留数为 \((-1)^{n}/n!\)。
+\end{theorem}
+
+\begin{proof}
+对任意正整数 \(m\)，在 \(\operatorname{Re}(s)>-m\) 上定义
+\[
+F_{m}(s)=\frac{\Gamma(s+m)}{(s+m-1)(s+m-2)\cdots s}.
+\]
+因 \(\Gamma(s+m)\) 在 \(\operatorname{Re}(s)>-m\) 上全纯，故 \(F_{m}\) 在该半平面亚纯，单极点为 \(s=0,-1,\dots,-m+1\)。由引理 \ref{lem:FuncEq} 知在 \(\operatorname{Re}(s)>0\) 上 \(F_{m}(s)=\Gamma(s)\)。由解析延拓的唯一性，\(\Gamma(s)\) 即为所有 \(F_{m}\) 在全平面上的共同延拓。
+\end{proof}
+
+% ========== 1.3 ==========
+\section{余元公式（互补公式）}
+
+Gamma 函数关于直线 \(\operatorname{Re}(s)=1/2\) 具有优美的对称性。
+
+\begin{theorem}[余元公式]\label{thm:Complement}
+对所有 \(s\in\CC\)，
+\begin{equation}
+\Gamma(s)\Gamma(1-s)=\frac{\pi}{\sin\pi s}.
+\end{equation}
+特别地，\(\Gamma(1/2)=\sqrt{\pi}\)。
+\end{theorem}
+
+\begin{proof}
+只需对 \(0<s<1\) 证明等式，然后由解析延拓的唯一性（第二章定理 4.8）推广到全平面。因为等式两边都是 \(\CC\) 上的亚纯函数，且在区间 \((0,1)\) 上有极限点。
+
+当 \(0<s<1\) 时，利用定义：
+\[
+\Gamma(s)\Gamma(1-s)=\int_{0}^{\infty}\int_{0}^{\infty} e^{-t-u} t^{s-1}u^{-s}\, dt\, du.
+\]
+作代换 \(u=vt\)（\(t>0\) 固定），得
+\[
+\Gamma(s)\Gamma(1-s)=\int_{0}^{\infty}\int_{0}^{\infty} e^{-t(1+v)} v^{-s}\, dv\, dt.
+\]
+交换积分次序，先积 \(t\)：
+\[
+\int_{0}^{\infty} e^{-t(1+v)}\, dt = \frac{1}{1+v},
+\]
+于是
+\[
+\Gamma(s)\Gamma(1-s)=\int_{0}^{\infty} \frac{v^{-s}}{1+v}\, dv.
+\]
+再令 \(v=e^{x}\)，化为
+\[
+\int_{-\infty}^{\infty} \frac{e^{(1-s)x}}{1+e^{x}}\, dx = \frac{\pi}{\sin\pi s},
+\]
+其中最后一步用到第三章例 2 的围道积分结果（矩形围道）。
+\end{proof}
+
+% ========== 1.4 ==========
+\section{倒数 \(1/\Gamma(s)\) 及其增长阶}
+
+从余元公式可直接读出倒数的结构。
+
+\begin{theorem}[倒数 \(1/\Gamma(s)\)]\label{thm:RecipGamma}
+\begin{enumerate}
+\item \(1/\Gamma(s)\) 是整函数，只在 \(s=0,-1,-2,\dots\) 有单零点，其余点非零。
+\item \(1/\Gamma(s)\) 的增长阶为 1，即对任意 \(\varepsilon>0\)，
+\[
+\left|\frac{1}{\Gamma(s)}\right|\le C(\varepsilon) e^{c|s|^{1+\varepsilon}}.
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(i)} 由余元公式 \(\displaystyle\frac{1}{\Gamma(s)}=\Gamma(1-s)\frac{\sin\pi s}{\pi}\)。\(\Gamma(1-s)\) 在 \(s=1,2,3,\dots\) 有单极点，而 \(\sin\pi s\) 恰在这些点有单零点，相互抵消；在 \(s=0,-1,-2,\dots\) 处 \(\Gamma(1-s)\) 全纯非零，\(\sin\pi s\) 有单零点。故 \(1/\Gamma(s)\) 为整函数且仅在非正整数点处有单零点。
+
+\textbf{(ii)} 利用积分与级数的混合表示：
+\[
+\frac{1}{\Gamma(s)}= \underbrace{\left(\sum_{n=0}^{\infty}\frac{(-1)^{n}}{n!(n+1-s)}\right)\frac{\sin\pi s}{\pi}}_{I(s)}
++\underbrace{\left(\int_{1}^{\infty} e^{-t}t^{-s}\, dt\right)\frac{\sin\pi s}{\pi}}_{J(s)}.
+\]
+对 \(J(s)\)：由 \(|\int_{1}^{\infty} e^{-t}t^{-s}dt|\le e^{(|s|+1)\log(|s|+1)}\) 及 \(|\sin\pi s|\le e^{\pi|s|}\)，得 \(|J(s)|\le c_{1} e^{c_{2}|s|\log|s|}\)。
+
+对 \(I(s)\)：当 \(|\operatorname{Im}(s)|\ge1\) 时，分母模有正下界，级数被 \(\sum 1/n!\) 控制；当 \(|\operatorname{Im}(s)|\le1\) 时，分离出最接近 \(s\) 的一项，利用 \(\sin\pi s\) 抵消极点，其余项一致有界。综上，两部分均满足所需上界。因此增长阶 \(\le1\)。
+
+\noindent\textbf{增长阶恰为 1 的补充证明：}
+取 \(s=-k-1/2\)（\(k\) 为正整数）。由余元公式，
+\[
+\left|\frac{1}{\Gamma(-k-1/2)}\right|
+= \Gamma(k+3/2)\cdot\frac{|\sin\pi(-k-1/2)|}{\pi}
+= \frac{1}{\pi}\Gamma(k+3/2) > \frac{1}{\pi} k!.
+\]
+由斯特林公式，\(k! \sim \sqrt{2\pi k}(k/e)^{k}\)，其主导项为 \(e^{k\log k}\)。若增长阶 \(\rho<1\)，则存在 \(\varepsilon>0\) 使 \(|1/\Gamma(s)|\le A e^{B|s|^{1-\varepsilon}}\)；但当 \(k\) 很大时，下界 \(e^{k\log k}\) 远快于上界 \(e^{B k^{1-\varepsilon}}\)，矛盾。因此增长阶不能小于 1。结合上界估计，增长阶恰为 1。
+\end{proof}
+
+% ========== 1.5 ==========
+\section{Weierstrass 乘积公式}
+
+利用 Hadamard 分解定理可得 \(1/\Gamma(s)\) 的无穷乘积表示，其中自然地引出 Euler 常数 \(\gamma\)。
+
+\begin{definition}[Euler 常数]
+Euler 常数定义为
+\[
+\gamma = \lim_{N\to\infty}\left(\sum_{n=1}^{N}\frac{1}{n} - \log N\right).
+\]
+该极限的存在性可以通过均值定理（将序列写成收敛级数）或单调有界原理证明。
+\end{definition}
+
+\begin{theorem}[Weierstrass 乘积公式]\label{thm:ProdFormula}
+对所有 \(s\in\CC\)，
+\[
+\frac{1}{\Gamma(s)} = e^{\gamma s} s \prod_{n=1}^{\infty} \left(1+\frac{s}{n}\right) e^{-s/n}.
+\]
+\end{theorem}
+
+\begin{proof}
+由定理 \ref{thm:RecipGamma}，\(1/\Gamma(s)\) 是增长阶为 1 的整函数，零点为单零点 \(s=0,-1,-2,\dots\)。由 Hadamard 分解定理，存在一次多项式 \(P(s)=As+B\) 使得
+\[
+\frac{1}{\Gamma(s)} = e^{As+B} s \prod_{n=1}^{\infty} \left(1+\frac{s}{n}\right) e^{-s/n}.
+\]
+两边除以 \(s\) 并令 \(s\to0\)：左边 \(\to1\)（因 \(s\Gamma(s)\to1\)），右边 \(\to e^{B}\)，故 \(B=0\)。
+
+令 \(s=1\)，利用 \(\Gamma(1)=1\) 得
+\[
+e^{-A} = \prod_{n=1}^{\infty} \left(1+\frac{1}{n}\right) e^{-1/n}.
+\]
+取部分积：
+\[
+\prod_{n=1}^{N} \left(1+\frac{1}{n}\right) e^{-1/n}
+= (N+1) \exp\!\left(-\sum_{n=1}^{N}\frac{1}{n}\right)
+= \frac{N+1}{N} e^{-(\sum_{n=1}^{N}1/n - \log N)} \to e^{-\gamma}.
+\]
+故 \(e^{-A}=e^{-\gamma}\)，即 \(A=\gamma\)。代入即得乘积公式。
+\end{proof}
+
+\end{document}
